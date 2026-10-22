@@ -1,0 +1,53 @@
+name: danger-board-scan
+
+# Keeps the Live Danger Board current. Every 15 minutes (and on manual
+# dispatch) it installs the four published Security Wave tools, re-audits
+# the factory watchlist, watches npm for new tool releases, and commits a
+# data update only when something changed. All actions are SHA-pinned;
+# this repo is audited by its own tooling (actionpin verdict: PINNED).
+
+on:
+  schedule:
+    - cron: "*/15 * * * *"
+  workflow_dispatch:
+    inputs:
+      extra_repo:
+        description: "Optional extra repo to scan once (CloudCorpRecords namespace only), e.g. CloudCorpRecords/security-wave-fixture"
+        required: false
+        type: string
+
+permissions:
+  contents: write
+
+concurrency:
+  group: danger-board-scan
+  cancel-in-progress: false
+
+jobs:
+  scan:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - name: Check out the board
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - name: Set up Node
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+        with:
+          node-version: "20"
+      - name: Install the published wave tools
+        run: npm install -g @reneturcios/hookcheck @reneturcios/actionpin @reneturcios/injectcheck @reneturcios/tracewatch
+      - name: Run the scan pipeline
+        env:
+          EXTRA_REPO: ${{ github.event.inputs.extra_repo }}
+        run: node scripts/update-data.mjs
+      - name: Commit data changes, if any
+        run: |
+          if [ -n "$(git status --porcelain data)" ]; then
+            git config user.name "security-wave-board"
+            git config user.email "security-wave-board@users.noreply.github.com"
+            git add data
+            git commit -m "data: scheduled scan update"
+            git push
+          else
+            echo "No data changes to commit."
+          fi

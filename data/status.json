@@ -1,0 +1,348 @@
+{
+ "generated_at": "2026-10-22T15:06:13Z",
+ "generated_by": "hand export from the workspace validation record (seed); the scheduled scan refreshes versions and the watchlist grid from public sources",
+ "tools": {
+  "hookcheck": {
+   "version": "0.1.14",
+   "tests": 308,
+   "tests_source": "Round 3 verification on v0.1.13 (308); v0.1.14 adds the P-111 suite, exact count lands with the Round 4 export",
+   "npm": "https://www.npmjs.com/package/@reneturcios/hookcheck",
+   "repo": "https://github.com/CloudCorpRecords/hookcheck",
+   "blurb": "Persistence hook auditor: install scripts, agent config hooks, folderOpen tasks, MCP autostart."
+  },
+  "actionpin": {
+   "version": "0.1.6",
+   "tests": 138,
+   "tests_source": "Round 3 verification on v0.1.6",
+   "npm": "https://www.npmjs.com/package/@reneturcios/actionpin",
+   "repo": "https://github.com/CloudCorpRecords/actionpin",
+   "blurb": "GitHub Actions SHA-pinning audit and fix. Mutable refs are how tj-actions happened."
+  },
+  "injectcheck": {
+   "version": "0.1.13",
+   "tests": 363,
+   "tests_source": "Fix pass 2 report on v0.1.13",
+   "npm": "https://www.npmjs.com/package/@reneturcios/injectcheck",
+   "repo": "https://github.com/CloudCorpRecords/injectcheck",
+   "blurb": "Prompt-injection scanner for content agents read: issues, PRs, docs, comments."
+  },
+  "tracewatch": {
+   "version": "0.1.0",
+   "tests": 21,
+   "tests_source": "Counted from the repo test suite at export (5 test files)",
+   "npm": "https://www.npmjs.com/package/@reneturcios/tracewatch",
+   "repo": "https://github.com/CloudCorpRecords/tracewatch",
+   "blurb": "Observability and root cause: scan history, diffs, blame provenance, watch mode with measured time-to-detect."
+  }
+ },
+ "ledger": {
+  "as_of": "2026-10-22",
+  "source": "validation/problems.md (P-001 to P-111), Round 3 verdict table, fix pass 2 close-outs",
+  "found": 111,
+  "fixed_confirmed": 91,
+  "fixed_in_fixpass2": 6,
+  "fixed_unverified": 3,
+  "limits_documented": 6,
+  "open_blocker": 0,
+  "open_real": 2,
+  "open_cosmetic": 3,
+  "open_detail": "Open REAL: P-070 (hookcheck giant-workflow output shape), P-075 (hookcheck trailing-whitespace anchor fragility). Open COSMETIC: P-073, P-074, P-076. Fix pass 2 release 2 and the Round 4 mini-validation are still running; counters refresh on the next hand export."
+ },
+ "corpus": {
+  "files": 806,
+  "checks": 211,
+  "note": "Accumulated regression corpus: every failure ever caught, re-run in full before any release counts. 211 checks PASS on the current binaries."
+ },
+ "rounds": {
+  "latest": "Round 3",
+  "verdict": "NOT SOLID",
+  "bar": "Solid requires a validation round with zero BLOCKER and zero unexplained REAL problems on the final binaries.",
+  "determinism": "10 of 10 target sets identical across 3 runs (Round 3)"
+ },
+ "coverage": {
+  "distinct_repos": 176,
+  "mutations": 3569,
+  "real_texts": 550,
+  "note": "Overnight totals: 176+ distinct real repos scanned, 3,569 verdict-stability mutations, 550 hand-labeled real issue and PR texts, 662 labeled dataset rows."
+ },
+ "watchlist": [
+  {
+   "repo": "CloudCorpRecords/greenlight",
+   "head": "f009ea5e2a32",
+   "actionpin": {
+    "verdict": "PINNED",
+    "total": 13,
+    "pinned": 13,
+    "mutable": 0,
+    "branch": 0,
+    "local": 0,
+    "checked_at": "2026-10-22T15:06:19.979Z"
+   },
+   "hookcheck": {
+    "verdict": "REVIEW",
+    "total": 18,
+    "safe": 5,
+    "risky": 1,
+    "unknown": 12,
+    "checked_at": "2026-10-22T15:06:20.116Z"
+   }
+  },
+  {
+   "repo": "CloudCorpRecords/shipcheck",
+   "head": "bdf6ee706eae",
+   "actionpin": {
+    "verdict": "PINNED",
+    "total": 8,
+    "pinned": 8,
+    "mutable": 0,
+    "branch": 0,
+    "local": 0,
+    "checked_at": "2026-10-22T15:06:21.525Z"
+   },
+   "hookcheck": {
+    "verdict": "REVIEW",
+    "total": 12,
+    "safe": 4,
+    "risky": 1,
+    "unknown": 7,
+    "checked_at": "2026-10-22T15:06:21.682Z"
+   }
+  },
+  {
+   "repo": "CloudCorpRecords/cidiff",
+   "head": "b01a3b58c777",
+   "actionpin": {
+    "verdict": "PINNED",
+    "total": 8,
+    "pinned": 8,
+    "mutable": 0,
+    "branch": 0,
+    "local": 0,
+    "checked_at": "2026-10-22T15:06:23.086Z"
+   },
+   "hookcheck": {
+    "verdict": "REVIEW",
+    "total": 12,
+    "safe": 4,
+    "risky": 1,
+    "unknown": 7,
+    "checked_at": "2026-10-22T15:06:23.244Z"
+   }
+  },
+  {
+   "repo": "CloudCorpRecords/reprocheck",
+   "head": "814741640672",
+   "actionpin": {
+    "verdict": "PINNED",
+    "total": 8,
+    "pinned": 8,
+    "mutable": 0,
+    "branch": 0,
+    "local": 0,
+    "checked_at": "2026-10-22T15:06:24.545Z"
+   },
+   "hookcheck": {
+    "verdict": "REVIEW",
+    "total": 12,
+    "safe": 4,
+    "risky": 1,
+    "unknown": 7,
+    "checked_at": "2026-10-22T15:06:24.668Z"
+   }
+  },
+  {
+   "repo": "CloudCorpRecords/prwatch",
+   "head": "98e072b243aa",
+   "actionpin": {
+    "verdict": "PINNED",
+    "total": 10,
+    "pinned": 10,
+    "mutable": 0,
+    "branch": 0,
+    "local": 0,
+    "checked_at": "2026-10-22T15:06:26.113Z"
+   },
+   "hookcheck": {
+    "verdict": "REVIEW",
+    "total": 13,
+    "safe": 5,
+    "risky": 1,
+    "unknown": 7,
+    "checked_at": "2026-10-22T15:06:26.353Z"
+   }
+  },
+  {
+   "repo": "CloudCorpRecords/claimcheck",
+   "head": "0641df601ef5",
+   "actionpin": {
+    "verdict": "PINNED",
+    "total": 10,
+    "pinned": 10,
+    "mutable": 0,
+    "branch": 0,
+    "local": 0,
+    "checked_at": "2026-10-22T15:06:27.611Z"
+   },
+   "hookcheck": {
+    "verdict": "REVIEW",
+    "total": 13,
+    "safe": 5,
+    "risky": 1,
+    "unknown": 7,
+    "checked_at": "2026-10-22T15:06:27.746Z"
+   }
+  },
+  {
+   "repo": "CloudCorpRecords/gatefile",
+   "head": "796ef2280d2b",
+   "actionpin": {
+    "verdict": "PINNED",
+    "total": 10,
+    "pinned": 10,
+    "mutable": 0,
+    "branch": 0,
+    "local": 0,
+    "checked_at": "2026-10-22T15:06:29.080Z"
+   },
+   "hookcheck": {
+    "verdict": "REVIEW",
+    "total": 16,
+    "safe": 7,
+    "risky": 1,
+    "unknown": 8,
+    "checked_at": "2026-10-22T15:06:29.202Z"
+   }
+  },
+  {
+   "repo": "CloudCorpRecords/pkgverdict",
+   "head": "d8817987400e",
+   "actionpin": {
+    "verdict": "PINNED",
+    "total": 8,
+    "pinned": 8,
+    "mutable": 0,
+    "branch": 0,
+    "local": 0,
+    "checked_at": "2026-10-22T15:06:30.421Z"
+   },
+   "hookcheck": {
+    "verdict": "REVIEW",
+    "total": 18,
+    "safe": 2,
+    "risky": 1,
+    "unknown": 15,
+    "checked_at": "2026-10-22T15:06:30.563Z"
+   }
+  },
+  {
+   "repo": "CloudCorpRecords/xod",
+   "head": "8d2e0d10fb88",
+   "actionpin": {
+    "verdict": "PINNED",
+    "total": 23,
+    "pinned": 23,
+    "mutable": 0,
+    "branch": 0,
+    "local": 0,
+    "checked_at": "2026-10-22T14:57:43.893Z"
+   },
+   "hookcheck": {
+    "verdict": "REVIEW",
+    "total": 48,
+    "safe": 0,
+    "risky": 11,
+    "unknown": 37,
+    "checked_at": "2026-10-22T14:57:47.129Z"
+   }
+  },
+  {
+   "repo": "CloudCorpRecords/hookcheck",
+   "head": "21a7d24f8bf5",
+   "actionpin": {
+    "verdict": "PINNED",
+    "total": 8,
+    "pinned": 8,
+    "mutable": 0,
+    "branch": 0,
+    "local": 0,
+    "checked_at": "2026-10-22T15:06:49.511Z"
+   },
+   "hookcheck": {
+    "verdict": "REVIEW",
+    "total": 12,
+    "safe": 4,
+    "risky": 1,
+    "unknown": 7,
+    "checked_at": "2026-10-22T15:06:49.634Z"
+   }
+  },
+  {
+   "repo": "CloudCorpRecords/actionpin",
+   "head": "eedce13b6551",
+   "actionpin": {
+    "verdict": "PINNED",
+    "total": 8,
+    "pinned": 8,
+    "mutable": 0,
+    "branch": 0,
+    "local": 0,
+    "checked_at": "2026-10-22T15:06:51.082Z"
+   },
+   "hookcheck": {
+    "verdict": "REVIEW",
+    "total": 12,
+    "safe": 4,
+    "risky": 1,
+    "unknown": 7,
+    "checked_at": "2026-10-22T15:06:51.215Z"
+   }
+  },
+  {
+   "repo": "CloudCorpRecords/injectcheck",
+   "head": "d8a0cd68fd7f",
+   "actionpin": {
+    "verdict": "PINNED",
+    "total": 8,
+    "pinned": 8,
+    "mutable": 0,
+    "branch": 0,
+    "local": 0,
+    "checked_at": "2026-10-22T15:06:54.003Z"
+   },
+   "hookcheck": {
+    "verdict": "REVIEW",
+    "total": 12,
+    "safe": 4,
+    "risky": 1,
+    "unknown": 7,
+    "checked_at": "2026-10-22T15:06:54.136Z"
+   }
+  },
+  {
+   "repo": "CloudCorpRecords/tracewatch",
+   "head": "d13cf79546b3",
+   "actionpin": {
+    "verdict": "PINNED",
+    "total": 8,
+    "pinned": 8,
+    "mutable": 0,
+    "branch": 0,
+    "local": 0,
+    "checked_at": "2026-10-22T15:06:55.377Z"
+   },
+   "hookcheck": {
+    "verdict": "REVIEW",
+    "total": 12,
+    "safe": 4,
+    "risky": 1,
+    "unknown": 7,
+    "checked_at": "2026-10-22T15:06:55.497Z"
+   }
+  }
+ ],
+ "pipeline": {
+  "last_scan_at": "2026-10-22T15:06:13Z",
+  "interval_minutes": 15,
+  "note": "Scans run every 15 minutes; the stamp moves when a scan changes the data."
+ }
+}

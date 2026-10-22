@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Security Wave: Live Danger Board</title>
+<meta name="description" content="Live danger tracking for the Security Wave: hookcheck, actionpin, injectcheck, tracewatch. Real-time findings on our own factory, proofs, and the hand-verified problem ledger.">
+<style>
+  :root{
+    --bg:#07090d; --panel:#0d1117; --panel2:#11161f; --line:#21262d; --line2:#2c333d;
+    --text:#e6edf3; --dim:#8b949e; --faint:#6e7681;
+    --red:#f85149; --orange:#ffa657; --yellow:#e3b341; --blue:#58a6ff; --green:#3fb950; --purple:#bc8cff;
+    --mono:ui-monospace,SFMono-Regular,Menlo,Consolas,"Liberation Mono",monospace;
+    --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif;
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{margin:0;background:var(--bg);color:var(--text);font-family:var(--sans);font-size:15px;line-height:1.55}
+  a{color:var(--blue);text-decoration:none}
+  a:hover{text-decoration:underline}
+  code,.mono{font-family:var(--mono)}
+  .wrap{max-width:1180px;margin:0 auto;padding:0 18px 60px}
+  header.top{position:sticky;top:0;z-index:20;background:rgba(7,9,13,.92);backdrop-filter:blur(6px);border-bottom:1px solid var(--line)}
+  .top-in{max-width:1180px;margin:0 auto;padding:10px 18px;display:flex;gap:14px;align-items:center;flex-wrap:wrap}
+  .brand{font-family:var(--mono);font-weight:700;letter-spacing:.14em;font-size:14px}
+  .brand .wave{color:var(--red)}
+  .stamp{margin-left:auto;font-family:var(--mono);font-size:12px;color:var(--dim);display:flex;align-items:center;gap:8px}
+  .dot{width:8px;height:8px;border-radius:50%;background:var(--green);animation:pulse 2s infinite}
+  @keyframes pulse{0%{box-shadow:0 0 0 0 rgba(63,185,80,.5)}70%{box-shadow:0 0 0 7px rgba(63,185,80,0)}100%{box-shadow:0 0 0 0 rgba(63,185,80,0)}}
+  nav.sub{border-bottom:1px solid var(--line);background:var(--panel)}
+  nav.sub .wrap{padding-top:0;padding-bottom:0;display:flex;gap:4px;flex-wrap:wrap}
+  nav.sub a{font-family:var(--mono);font-size:12px;letter-spacing:.08em;color:var(--dim);padding:9px 10px;display:inline-block}
+  nav.sub a:hover{color:var(--text);text-decoration:none;background:var(--panel2)}
+  section{margin-top:34px}
+  h2.sec{font-family:var(--mono);font-size:13px;letter-spacing:.18em;color:var(--dim);border-bottom:1px solid var(--line);padding-bottom:8px;margin:0 0 16px;display:flex;align-items:baseline;gap:10px}
+  h2.sec .n{color:var(--red)}
+  h2.sec .right{margin-left:auto;font-size:11px;letter-spacing:.04em;color:var(--faint)}
+  .hero{padding:38px 0 6px}
+  .hero h1{font-family:var(--mono);font-size:clamp(30px,5.4vw,52px);line-height:1.05;margin:0;letter-spacing:.02em}
+  .hero h1 .thin{color:var(--dim);font-weight:400}
+  .position{border-left:3px solid var(--red);padding:10px 16px;margin:22px 0;background:var(--panel);font-size:17px;max-width:860px}
+  .hero p.lede{color:var(--dim);max-width:820px;margin:14px 0 0}
+  .tools{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:12px;margin-top:22px}
+  .tool{background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:14px 15px}
+  .tool h3{margin:0;font-family:var(--mono);font-size:16px;display:flex;align-items:center;gap:8px}
+  .chip{font-family:var(--mono);font-size:11px;padding:1px 7px;border-radius:20px;border:1px solid var(--line2);color:var(--dim);white-space:nowrap}
+  .chip.ver{color:var(--green);border-color:rgba(63,185,80,.4)}
+  .tool p{color:var(--dim);font-size:13.5px;margin:8px 0 10px;min-height:40px}
+  .cmd{font-family:var(--mono);font-size:12px;background:#05070a;border:1px solid var(--line);border-radius:6px;padding:7px 9px;color:#a5d6a7;overflow-x:auto;white-space:nowrap}
+  .tool .links{margin-top:9px;font-family:var(--mono);font-size:12px;display:flex;gap:12px}
+  .stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px}
+  .stat{background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:13px 15px}
+  .stat .num{font-family:var(--mono);font-size:27px;font-weight:700;line-height:1.1}
+  .stat .lab{font-family:var(--mono);font-size:11px;letter-spacing:.1em;color:var(--dim);margin-top:4px}
+  .stat .sub{font-size:12px;color:var(--faint);margin-top:3px}
+  .num.red{color:var(--red)} .num.green{color:var(--green)} .num.yellow{color:var(--yellow)} .num.orange{color:var(--orange)}
+  .filters{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px}
+  .filters button{font-family:var(--mono);font-size:11.5px;letter-spacing:.05em;background:var(--panel);color:var(--dim);border:1px solid var(--line2);border-radius:20px;padding:5px 11px;cursor:pointer}
+  .filters button:hover{color:var(--text)}
+  .filters button.on{color:#fff;background:#1f2733;border-color:var(--blue)}
+  .feed{border:1px solid var(--line);border-radius:8px;overflow:hidden}
+  .ev{display:flex;gap:12px;padding:11px 14px;background:var(--panel);border-bottom:1px solid var(--line)}
+  .ev:last-child{border-bottom:none}
+  .ev:hover{background:var(--panel2)}
+  .ev .bar{flex:0 0 4px;border-radius:2px}
+  .sev-critical{background:var(--red)} .sev-high{background:var(--orange)} .sev-medium{background:var(--yellow)}
+  .sev-low{background:var(--blue)} .sev-info{background:var(--faint)} .sev-resolved{background:var(--green)}
+  .ev .main{flex:1;min-width:0}
+  .ev .t{font-weight:600;font-size:14.5px}
+  .ev .d{color:var(--dim);font-size:13.5px;margin-top:2px}
+  .ev .meta{flex:0 0 auto;text-align:right;font-family:var(--mono);font-size:11px;color:var(--faint);white-space:nowrap}
+  .tag{display:inline-block;font-family:var(--mono);font-size:10px;letter-spacing:.07em;padding:0 6px;border-radius:3px;border:1px solid var(--line2);color:var(--dim);margin-right:5px;vertical-align:1px}
+  .tag.tool{color:var(--purple);border-color:rgba(188,140,255,.35)}
+  .rule{font-size:12.5px;color:var(--dim);border:1px dashed var(--line2);border-radius:6px;padding:8px 12px;margin-bottom:12px;background:rgba(88,166,255,.04)}
+  table{width:100%;border-collapse:collapse;font-size:13.5px}
+  th{font-family:var(--mono);font-size:11px;letter-spacing:.09em;color:var(--dim);text-align:left;padding:8px 10px;border-bottom:1px solid var(--line2);background:var(--panel)}
+  td{padding:8px 10px;border-bottom:1px solid var(--line);vertical-align:top}
+  tr:last-child td{border-bottom:none}
+  .gridbox{border:1px solid var(--line);border-radius:8px;overflow:auto;background:var(--panel)}
+  .vchip{font-family:var(--mono);font-size:11px;font-weight:700;padding:1px 8px;border-radius:3px;white-space:nowrap}
+  .v-green{background:rgba(63,185,80,.14);color:var(--green);border:1px solid rgba(63,185,80,.4)}
+  .v-yellow{background:rgba(227,179,65,.12);color:var(--yellow);border:1px solid rgba(227,179,65,.4)}
+  .v-orange{background:rgba(255,166,87,.12);color:var(--orange);border:1px solid rgba(255,166,87,.45)}
+  .v-red{background:rgba(248,81,73,.13);color:var(--red);border:1px solid rgba(248,81,73,.45)}
+  .v-gray{background:rgba(139,148,158,.12);color:var(--dim);border:1px solid var(--line2)}
+  .cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:12px}
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:14px 15px}
+  .card h3{margin:0 0 6px;font-size:14.5px}
+  .card p{color:var(--dim);font-size:13.5px;margin:0}
+  .card .src{font-family:var(--mono);font-size:11px;color:var(--faint);margin-top:9px;word-break:break-all}
+  .banner{border:1px solid rgba(227,179,65,.5);background:rgba(227,179,65,.07);border-radius:8px;padding:12px 15px;font-size:14px;margin-bottom:14px}
+  .banner b{color:var(--yellow)}
+  .split{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+  @media (max-width:760px){.split{grid-template-columns:1fr}.ev{flex-wrap:wrap}.ev .meta{text-align:left}}
+  .bar-row{display:flex;align-items:center;gap:10px;font-family:var(--mono);font-size:12px;margin:6px 0}
+  .bar-row .k{flex:0 0 210px;color:var(--dim)}
+  .bar-track{flex:1;height:9px;background:#05070a;border:1px solid var(--line);border-radius:4px;overflow:hidden}
+  .bar-fill{height:100%}
+  .note{color:var(--faint);font-size:12.5px;margin-top:10px}
+  footer{margin-top:46px;border-top:1px solid var(--line);padding-top:16px;color:var(--faint);font-size:12.5px}
+  .hidden{display:none}
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="top-in">
+    <div class="brand">SECURITY <span class="wave">WAVE</span> / LIVE DANGER BOARD</div>
+    <div class="stamp"><span class="dot"></span><span id="stamp">loading data</span></div>
+  </div>
+</header>
+<nav class="sub"><div class="wrap">
+  <a href="#feed">DANGERS FEED</a><a href="#watchlist">WATCHLIST</a><a href="#proofs">PROOFS</a><a href="#ledger">THE LEDGER</a><a href="#about">METHOD</a>
+</div></nav>
+
+<div class="wrap">
+  <div class="hero">
+    <h1>The repo an agent touches<br><span class="thin">should not be able to rob it.</span></h1>
+    <div class="position">Greenlight checks if an agent may contribute. The Security Wave checks if what the agent touches is trying to rob it.</div>
+    <p class="lede">Four deterministic, offline tools, one job each: audit the persistence hooks hiding in a repo, pin the GitHub Actions that can be retargeted after review, scan the text an agent is about to read for injected instructions, and keep the receipts (history, diffs, and blame) when something changes. This board tracks their findings on our own factory in near real time, publishes the proof benchmarks, and keeps the program's problem ledger honest in public.</p>
+    <div class="tools" id="toolcards"></div>
+  </div>
+
+  <section id="overview">
+    <h2 class="sec"><span class="n">01</span> PROGRAM STATE <span class="right" id="roundline"></span></h2>
+    <div class="stats" id="stats"></div>
+  </section>
+
+  <section id="feed">
+    <h2 class="sec"><span class="n">02</span> LIVE DANGERS FEED <span class="right">AUTO-REFRESH 60S · SCHEDULED SCAN EVERY 15 MIN</span></h2>
+    <div class="rule"><b>Public accuracy rule:</b> events about our own factory repos may name the repo and the finding. Events about external public repos are shown in aggregate only (counts and rule families, no repo names, no accusations) unless a verdict has been hand-verified into the published record.</div>
+    <div class="filters" id="filters"></div>
+    <div class="feed" id="feedlist"></div>
+    <p class="note" id="feednote"></p>
+  </section>
+
+  <section id="watchlist">
+    <h2 class="sec"><span class="n">03</span> FACTORY WATCHLIST <span class="right">OUR OWN REPOS, SCANNED BY OUR OWN TOOLS</span></h2>
+    <div class="gridbox"><table>
+      <thead><tr><th>Repo</th><th>Head</th><th>actionpin</th><th>Pinned</th><th>hookcheck</th><th>Risky / inventoried</th><th>Checked</th></tr></thead>
+      <tbody id="gridbody"></tbody>
+    </table></div>
+    <p class="note">hookcheck REVIEW across the factory is the calibrated state: every repo's publish path downloads one binary over HTTPS (the mcp-publisher tool), which hookcheck correctly inventories as one RISKY finding held below the top verdict. The exposure is recorded as accepted risk in the program's morning report.</p>
+  </section>
+
+  <section id="proofs">
+    <h2 class="sec"><span class="n">04</span> PROOFS: THE CLOUDFLARE HEAD-TO-HEAD <span class="right" id="proofstamp"></span></h2>
+    <div id="proofbody"></div>
+  </section>
+
+  <section id="ledger">
+    <h2 class="sec"><span class="n">05</span> THE LEDGER, LIVE <span class="right" id="ledgerstamp"></span></h2>
+    <div class="split">
+      <div class="card"><h3>Disposition of every problem ever found</h3><div id="ledgerbars"></div><p class="note" id="ledgernote"></p></div>
+      <div class="card"><h3>What is still open</h3><p id="opendetail"></p><p class="note">Solid, by the program's own bar, requires a validation round with zero BLOCKER and zero unexplained REAL problems on the final binaries. Until a round clears that bar, this board says NOT SOLID, in those words.</p></div>
+    </div>
+  </section>
+
+  <section id="about">
+    <h2 class="sec"><span class="n">06</span> METHOD</h2>
+    <div class="cards">
+      <div class="card"><h3>Deterministic scanners, not vibes</h3><p>Every tool is a static, offline analyzer with a fixed rule set. Same input, same verdict: the validation program runs each target three times and hashes the output. No model is consulted at scan time, so a result can be re-run and argued with.</p></div>
+      <div class="card"><h3>Hand-verified before it is claimed</h3><p>Findings are checked against source by a human-grade read before they enter the ledger: 2,785 actionpin findings verified line by line (100 percent accurate), 1,265 hookcheck findings presence-verified, every COMPROMISED verdict of the mega-corpus hand-read (30 of 30 were false alarms at the time, and the calibration fixes they forced are in the ledger).</p></div>
+      <div class="card"><h3>Fixes before claims</h3><p>The wave's standing rule: if a tool still has problems, it gets updates until it is solid, and only then does marketing get its numbers. Every number on this page traces to a data file generated from a named source: the npm registry, the GitHub API, the validation ledger, or the scheduled scan itself.</p></div>
+      <div class="card"><h3>Freshness, stated plainly</h3><p>Scans are live: the watchlist grid, tool versions, and this feed refresh from the scheduled scan every 15 minutes. Ledger counters are hand-exported from the validation record and carry their export date; they move when a validation round or fix pass closes, not every quarter hour.</p></div>
+    </div>
+  </section>
+
+  <footer>
+    Security Wave: hookcheck, actionpin, injectcheck, tracewatch. Built and run in the open by CloudCorpRecords.
+    Data sources: npm registry, GitHub API, the hand-verified validation ledger, and the scheduled scans of the published tools.
+    This page is static and self-contained: no trackers, no external fonts, no third-party scripts.
+  </footer>
+</div>
+<script>
+"use strict";
+const $ = (id) => document.getElementById(id);
+const esc = (s) => String(s ?? "").replace(/[&<>"']/g, (c) => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const ORDER = ["hookcheck", "actionpin", "injectcheck", "tracewatch"];
+const CMD = {
+  hookcheck: "npx -y @reneturcios/hookcheck scan .",
+  actionpin: "npx -y @reneturcios/actionpin audit .",
+  injectcheck: "npx -y @reneturcios/injectcheck scan .",
+  tracewatch: "npx -y @reneturcios/tracewatch ingest ."
+};
+const TYPE_LABEL = {finding_detected:"FINDING", verdict_change:"VERDICT CHANGE", ref_move:"REF MOVE",
+  pin_regression:"PIN REGRESSION", finding_resolved:"RESOLVED", watch_detection:"WATCH DETECTION",
+  release:"RELEASE", validation_round:"VALIDATION", ledger_update:"LEDGER", program:"PROGRAM"};
+const FILTERS = [
+  ["all","ALL"],["finding_detected","FINDINGS"],["verdict_change","VERDICT CHANGES"],
+  ["pins","REF MOVES + REGRESSIONS"],["finding_resolved","RESOLVED"],["release","RELEASES"],
+  ["validation_round","ROUNDS"],["watch_detection","WATCH"],["program","PROGRAM"]];
+let FILTER = "all";
+let DOCS = {status:null, events:null, proofs:null};
+
+function rel(iso){
+  if(!iso) return "";
+  const s = Math.max(0,(Date.now() - new Date(iso).getTime())/1000);
+  if(s < 90) return "just now";
+  if(s < 3600) return Math.round(s/60) + " min ago";
+  if(s < 86400) return Math.round(s/3600) + " hr ago";
+  return Math.round(s/86400) + " d ago";
+}
+function abs(iso){ return iso ? new Date(iso).toISOString().replace("T"," ").slice(0,16) + " UTC" : ""; }
+function vclass(v){
+  if(["PINNED","CLEAN"].includes(v)) return "v-green";
+  if(["REVIEW","PARTIAL"].includes(v)) return "v-yellow";
+  if(v === "EXPOSED") return "v-orange";
+  if(["COMPROMISED-PATTERN","FINDINGS"].includes(v)) return "v-red";
+  return "v-gray";
+}
+async function fetchJson(path){
+  const r = await fetch(path + "?t=" + Date.now(), {cache:"no-store"});
+  if(!r.ok) throw new Error(path + " " + r.status);
+  return r.json();
+}
+
+function renderTools(){
+  const t = DOCS.status?.tools ?? {};
+  $("toolcards").innerHTML = ORDER.map((name) => {
+    const x = t[name] ?? {};
+    return `<div class="tool"><h3>${esc(name)} <span class="chip ver">v${esc(x.version ?? "?")}</span> <span class="chip">${esc(x.tests ?? "?")} tests</span></h3>
+      <p>${esc(x.blurb ?? "")}</p>
+      <div class="cmd">${esc(CMD[name])}</div>
+      <div class="links"><a href="${esc(x.repo ?? "#")}">GitHub</a><a href="${esc(x.npm ?? "#")}">npm</a><span class="mono" style="color:var(--faint)">CLI + MCP</span></div></div>`;
+  }).join("");
+}
+
+function renderStats(){
+  const s = DOCS.status ?? {}; const L = s.ledger ?? {}; const C = s.corpus ?? {}; const V = s.coverage ?? {}; const R = s.rounds ?? {};
+  const fixed = (L.fixed_confirmed ?? 0) + (L.fixed_in_fixpass2 ?? 0) + (L.fixed_unverified ?? 0);
+  $("roundline").textContent = `LATEST: ${R.latest ?? ""} · VERDICT ${R.verdict ?? ""} · ${R.determinism ?? ""}`;
+  const cell = (num, cls, lab, sub) => `<div class="stat"><div class="num ${cls}">${num}</div><div class="lab">${lab}</div><div class="sub">${sub}</div></div>`;
+  $("stats").innerHTML =
+    cell(L.found ?? "?", "", "PROBLEMS LEDGERED", "every one hand-verified into the record") +
+    cell(fixed, "green", "CLOSED AS FIXED", `${L.fixed_confirmed ?? 0} confirmed on final binaries`) +
+    cell(L.open_blocker ?? "?", (L.open_blocker ? "red" : "green"), "BLOCKERS OPEN", "the bar is zero, and zero unexplained REAL") +
+    cell(L.open_real ?? "?", (L.open_real ? "orange" : "green"), "REAL PROBLEMS OPEN", "named in the ledger section below") +
+    cell((C.files ?? "?") + " / " + (C.checks ?? "?"), "", "CORPUS FILES / CHECKS", "accumulated regression corpus, all PASS") +
+    cell((V.distinct_repos ?? "?") + "+", "", "REAL REPOS SCANNED", `${V.mutations ?? "?"} mutations · ${V.real_texts ?? "?"} hand-labeled texts`);
+}
+
+function evVisible(e){
+  if(FILTER === "all") return true;
+  if(FILTER === "pins") return e.type === "pin_regression" || e.type === "ref_move";
+  return e.type === FILTER;
+}
+function renderFeed(){
+  const evs = (DOCS.events?.events ?? []).filter(evVisible);
+  $("feedlist").innerHTML = evs.length ? evs.map((e) => `
+    <div class="ev"><div class="bar sev-${esc(e.severity ?? "info")}"></div>
+      <div class="main">
+        <div class="t"><span class="tag">${esc(TYPE_LABEL[e.type] ?? e.type)}</span>${e.tool ? `<span class="tag tool">${esc(e.tool)}</span>` : ""}${esc(e.title)}</div>
+        <div class="d">${esc(e.detail ?? "")}</div>
+        ${e.repo ? `<div class="d mono" style="font-size:12px">${esc(e.repo)}</div>` : ""}
+      </div>
+      <div class="meta"><span title="${esc(abs(e.ts))}">${esc(rel(e.ts))}</span><br>${esc((e.ts ?? "").slice(0,10))}</div>
+    </div>`).join("") : `<div class="ev"><div class="main"><div class="t">No events in this view yet.</div><div class="d">The scheduled scan appends events as things happen. Watch detections appear here when tracewatch watch runs are exported.</div></div></div>`;
+  const total = DOCS.events?.events?.length ?? 0;
+  $("feednote").textContent = `Showing ${evs.length} of ${total} events. Program history is seeded from the validation record with real timestamps; new events are appended by the scheduled scan every 15 minutes. The feed keeps the newest 500 events; older ones are archived by month in the repo under data/archive/.`;
+}
+function renderFilters(){
+  $("filters").innerHTML = FILTERS.map(([k, lab]) =>
+    `<button data-f="${k}" class="${FILTER === k ? "on" : ""}">${lab}</button>`).join("");
+  $("filters").querySelectorAll("button").forEach((b) =>
+    b.addEventListener("click", () => { FILTER = b.dataset.f; renderFilters(); renderFeed(); }));
+}
+
+function renderGrid(){
+  const rows = DOCS.status?.watchlist ?? [];
+  $("gridbody").innerHTML = rows.map((w) => {
+    const ap = w.actionpin ?? {}, hc = w.hookcheck ?? {};
+    return `<tr>
+      <td class="mono"><a href="https://github.com/${esc(w.repo)}">${esc(w.repo.replace("CloudCorpRecords/",""))}</a></td>
+      <td class="mono" style="color:var(--dim)">${esc(w.head ?? "")}</td>
+      <td><span class="vchip ${vclass(ap.verdict)}">${esc(ap.verdict ?? "?")}</span></td>
+      <td class="mono">${esc(ap.pinned ?? "?")} / ${esc(ap.total ?? "?")}</td>
+      <td><span class="vchip ${vclass(hc.verdict)}">${esc(hc.verdict ?? "?")}</span></td>
+      <td class="mono">${esc(hc.risky ?? "?")} / ${esc(hc.total ?? "?")}</td>
+      <td class="mono" style="color:var(--dim)" title="${esc(abs(hc.checked_at))}">${esc(rel(hc.checked_at))}</td></tr>`;
+  }).join("");
+}
+
+function kvTable(rows){
+  if(!rows || !rows.length) return "";
+  const cols = Object.keys(rows[0]);
+  return `<div class="gridbox"><table><thead><tr>${cols.map((c) => `<th>${esc(c)}</th>`).join("")}</tr></thead>
+    <tbody>${rows.map((r) => `<tr>${cols.map((c) => `<td>${esc(r[c])}</td>`).join("")}</tr>`).join("")}</tbody></table></div>`;
+}
+function renderProofs(){
+  const p = DOCS.proofs ?? {};
+  $("proofstamp").textContent = p.generated_at ? "EXPORT " + p.generated_at.slice(0,10) : "";
+  let h = "";
+  if(p.status === "in_progress"){
+    h += `<div class="banner"><b>${esc(p.headline ?? "Benchmark in progress")}.</b> ${esc(p.note ?? "")}</div>`;
+  }
+  if(p.latency) h += `<h3>Measured latency</h3>${kvTable(p.latency.rows ?? p.latency)}`;
+  if(p.time_to_detect) h += `<h3>Time to detect</h3>${kvTable(p.time_to_detect.rows ?? p.time_to_detect)}`;
+  if(p.detection) h += `<h3>Detection on shared labeled sets</h3>${kvTable(p.detection.rows ?? p.detection)}`;
+  if((p.research_points ?? []).length){
+    h += `<div class="cards">${p.research_points.map((r) => `<div class="card"><h3>${esc(r.title)}</h3><p>${esc(r.body)}</p><div class="src">Source: ${esc(r.source)}</div></div>`).join("")}</div>`;
+  }
+  if(p.our_measured?.rows?.length){
+    h += `<h3 style="margin-top:20px">Our side, measured (validation program)</h3><p class="note" style="margin-top:0">${esc(p.our_measured.note ?? "")}</p>${kvTable(p.our_measured.rows)}`;
+  }
+  if((p.tracks ?? []).length){
+    h += `<h3 style="margin-top:20px">Benchmark design</h3>` + p.tracks.map((t) => `<p class="note" style="font-size:13.5px;color:var(--dim)">${esc(t)}</p>`).join("");
+  }
+  h += `<p class="note">Research source: ${esc(p.source ?? "")}. The word faster appears in program claims only tied to a measured local wall-clock number or to this sourced detection-point record. No Cloudflare latency or accuracy figure is estimated, ever.</p>`;
+  $("proofbody").innerHTML = h;
+}
+
+function renderLedger(){
+  const L = DOCS.status?.ledger ?? {}; const total = L.found ?? 0;
+  $("ledgerstamp").textContent = "EXPORT " + (L.as_of ?? "") + " · SOURCE: " + (L.source ?? "");
+  const rowsData = [
+    ["FIXED, confirmed on final binaries", L.fixed_confirmed ?? 0, "var(--green)"],
+    ["FIXED in fix pass 2 (Round 4 confirmation pending)", L.fixed_in_fixpass2 ?? 0, "#7ee787"],
+    ["FIXED, not yet re-verified", L.fixed_unverified ?? 0, "var(--yellow)"],
+    ["LIMIT, documented boundary", L.limits_documented ?? 0, "var(--blue)"],
+    ["OPEN, REAL", L.open_real ?? 0, "var(--orange)"],
+    ["OPEN, COSMETIC", L.open_cosmetic ?? 0, "var(--faint)"],
+    ["OPEN, BLOCKER", L.open_blocker ?? 0, "var(--red)"]];
+  $("ledgerbars").innerHTML = rowsData.map(([k, n, c]) =>
+    `<div class="bar-row"><span class="k">${esc(k)}</span><span class="bar-track"><span class="bar-fill" style="display:block;width:${total ? Math.max(1.5, 100 * n / total) : 0}%;background:${c}"></span></span><span>${n}</span></div>`).join("");
+  $("ledgernote").textContent = L.note ?? DOCS.status?.ledger?.source ?? "";
+  $("opendetail").textContent = L.open_detail ?? "";
+}
+
+function renderStamp(){
+  const g = DOCS.status?.generated_at;
+  $("stamp").textContent = g ? `DATA UPDATED ${rel(g).toUpperCase()} · ${abs(g)}` : "DATA UNAVAILABLE, RETRYING";
+}
+async function loadAll(){
+  try{
+    const [s, e, p] = await Promise.all([fetchJson("data/status.json"), fetchJson("data/events.json"), fetchJson("data/proofs.json")]);
+    DOCS = {status:s, events:e, proofs:p};
+    renderStamp(); renderTools(); renderStats(); renderFeed(); renderGrid(); renderProofs(); renderLedger();
+  }catch(err){
+    $("stamp").textContent = "DATA FETCH FAILED, RETRYING IN 60S";
+  }
+}
+renderFilters();
+loadAll();
+setInterval(loadAll, 60000);
+setInterval(renderStamp, 30000);
+</script>
+</body>
+</html>

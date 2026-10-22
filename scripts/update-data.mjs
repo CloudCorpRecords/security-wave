@@ -15,9 +15,16 @@
 //      visible whether or not it is clean.
 //   4. Events are capped at the newest 500; overflow is archived by month
 //      under data/archive/.
-// Ledger counters in status.json are NOT touched here: they come from the
-// hand-verified validation ledger and are refreshed by hand export only.
-// The page states this freshness split openly.
+//   5. The slow-moving numbers are derived, never hand-exported: the
+//      problem-ledger counters are parsed from ledger/problems.md and the
+//      corpus / coverage / round figures from ledger/program.md, both
+//      committed records in this repo (scripts/parse-records.mjs). A parse
+//      failure keeps the last good values and flags them stale.
+//   6. Test counts: when a tool's npm version differs from the version its
+//      recorded counts were produced on, the pipeline clones that release
+//      tag, runs npm ci and the tool's own test suite, and records the
+//      result. A failing suite is a danger event in the feed, never stale
+//      green. See SELF-UPDATE.md for the whole loop.
 //
 // Files are rewritten only when something actually changed, so the workflow
 // commits only on change. No dependencies beyond Node >= 20 and git.
@@ -26,6 +33,7 @@ import { readFileSync, writeFileSync, existsSync, mkdirSync, mkdtempSync, rmSync
 import { spawnSync } from "node:child_process";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
+import { parseLedger, parseProgram } from "./parse-records.mjs";
 
 const ROOT = process.cwd();
 const DATA = join(ROOT, "data");
@@ -38,8 +46,17 @@ const loadJson = (p) => JSON.parse(readFileSync(p, "utf8"));
 const saveJson = (p, obj) => writeFileSync(p, JSON.stringify(obj, null, 1) + "\n");
 
 function run(cmd, args, opts = {}) {
-  const r = spawnSync(cmd, args, { encoding: "utf8", timeout: opts.timeout ?? 120000, maxBuffer: 64 * 1024 * 1024 });
+  const r = spawnSync(cmd, args, { encoding: "utf8", timeout: opts.timeout ?? 120000, maxBuffer: 64 * 1024 * 1024, cwd: opts.cwd });
   return r;
+}
+
+function gitCommitTime(path) {
+  const r = run("git", ["log", "-1", "--format=%cI", "--", path], { timeout: 30000 });
+  if (r.status === 0) {
+    const s = (r.stdout || "").trim();
+    if (s) return s;
+  }
+  return null;
 }
 
 function scanRepo(fullName) {
@@ -105,6 +122,50 @@ function addEvent(ev) {
   newEvents.push(ev);
   changed = true;
   console.log(`event: ${ev.type} ${ev.title}`);
+}
+
+// 0. committed records: parse the ledger and the program record fresh.
+// The validation process commits updates to ledger/problems.md and
+// ledger/program.md as its work closes; everything downstream of those
+// commits is automatic. Parse failures keep the last good values, flagged
+// stale, and never blank a section.
+try {
+  const parsed = parseLedger(readFileSync(join(ROOT, "ledger", "problems.md"), "utf8"));
+  const prev = status.ledger ?? {};
+  const next = {
+    source: "ledger/problems.md in this repo (the public ledger of record), parsed by scripts/parse-records.mjs on every pipeline run",
+    as_of: gitCommitTime("ledger/problems.md") ?? prev.as_of ?? null,
+    ...parsed, stale: false,
+  };
+  if (JSON.stringify(next) !== JSON.stringify(prev)) {
+    status.ledger = next;
+    changed = true;
+    console.log(`ledger counters refreshed: ${parsed.found} found, ${parsed.fixed} fixed, ${parsed.open_total} open`);
+  }
+} catch (e) {
+  console.log(`ledger parse failed, keeping last good values flagged stale: ${e.message}`);
+  if (status.ledger && !status.ledger.stale) { status.ledger = { ...status.ledger, stale: true }; changed = true; }
+}
+try {
+  const parsed = parseProgram(readFileSync(join(ROOT, "ledger", "program.md"), "utf8"));
+  const asOf = gitCommitTime("ledger/program.md") ?? status.corpus?.as_of ?? null;
+  const blocks = [
+    ["corpus", { ...parsed.corpus, as_of: asOf, stale: false }],
+    ["coverage", { ...parsed.coverage, stale: false }],
+    ["rounds", { ...parsed.rounds, stale: false }],
+  ];
+  for (const [key, next] of blocks) {
+    if (JSON.stringify(next) !== JSON.stringify(status[key] ?? {})) {
+      status[key] = next;
+      changed = true;
+      console.log(`program record refreshed: ${key}`);
+    }
+  }
+} catch (e) {
+  console.log(`program record parse failed, keeping last good values flagged stale: ${e.message}`);
+  for (const key of ["corpus", "coverage", "rounds"]) {
+    if (status[key] && !status[key].stale) { status[key] = { ...status[key], stale: true }; changed = true; }
+  }
 }
 
 // 1. npm version watch
@@ -220,7 +281,86 @@ if (extra && /^CloudCorpRecords\/[\w.-]+$/.test(extra) && !(status.watchlist ?? 
   }
 }
 
-// 4. merge, cap, archive, write on change only.
+// 5. test cycles: for each tool, if the recorded test counts were produced
+// on a different version than the current npm latest, clone the release
+// tag, npm ci, and run the tool's own test suite. Counts on the board are
+// always produced by this pipeline from the published tag, never typed in.
+// A failed or errored cycle is recorded as a failed state and appends a
+// danger event; it never silently keeps the previous green.
+function parseTestCounts(text) {
+  // node:test summary lines, in both reporter shapes the runner emits:
+  // TAP ("# tests 21") and spec ("ℹ tests 21"). Either is authoritative.
+  const grab = (label) => {
+    const m = text.match(new RegExp(`^[#\\u2139] ${label} (\\d+)\\s*$`, "m"));
+    return m ? Number(m[1]) : null;
+  };
+  const total = grab("tests"), passed = grab("pass"), failed = grab("fail");
+  if (total != null && passed != null && failed != null) return { total, passed, failed };
+  const ok = (text.match(/^ok \d+/gm) || []).length;
+  const notOk = (text.match(/^not ok \d+/gm) || []).length;
+  if (ok + notOk > 0) return { total: ok + notOk, passed: ok, failed: notOk };
+  return null;
+}
+
+function runTestCycle(tool, version) {
+  const started = Date.now();
+  const tmp = mkdtempSync(join(tmpdir(), "swtest-"));
+  const dest = join(tmp, "repo");
+  const done = (state, extra = {}) => ({
+    state, passed: null, failed: null, total: null, ...extra,
+    tested_version: version, tested_at: nowIso(),
+    duration_s: Math.round((Date.now() - started) / 100) / 10,
+  });
+  try {
+    const clone = run("git", ["clone", "-q", "--depth", "1", "--branch", `v${version}`, `https://github.com/CloudCorpRecords/${tool}.git`, dest], { timeout: 300000 });
+    if (clone.status !== 0) return done("error", { error: `clone of tag v${version} failed` });
+    const ci = run("npm", ["ci", "--no-audit", "--no-fund", "--loglevel=error"], { timeout: 480000, cwd: dest });
+    if (ci.status !== 0) return done("error", { error: "npm ci failed on the release tag" });
+    const t = run("npm", ["test", "--silent"], { timeout: 600000, cwd: dest });
+    const counts = parseTestCounts(`${t.stdout ?? ""}\n${t.stderr ?? ""}`);
+    if (t.error || t.status == null) return done("error", { error: "test run timed out or was killed", ...(counts ?? {}) });
+    if (!counts) return done("error", { error: "test output unparsable (no test summary)" });
+    return done(counts.failed === 0 && t.status === 0 ? "pass" : "fail", counts);
+  } finally {
+    rmSync(tmp, { recursive: true, force: true });
+  }
+}
+
+for (const [tool, t] of Object.entries(status.tools ?? {})) {
+  const prev = t.tests && typeof t.tests === "object" ? t.tests : null;
+  const prevTested = prev?.tested_version ?? null;
+  if (!t.version || prevTested === t.version) continue;
+  console.log(`test cycle: ${tool} v${t.version} (recorded counts were from ${prevTested ?? "no recorded version"})`);
+  const res = runTestCycle(tool, t.version);
+  t.tests = res;
+  changed = true;
+  saveJson(STATUS_PATH, status);
+  console.log(`test cycle: ${tool} v${t.version} -> ${res.state}${res.total != null ? ` (${res.passed}/${res.total} passed)` : ""} in ${res.duration_s}s`);
+  if (res.state === "fail") {
+    addEvent({
+      id: `tests-${tool}-${t.version}-fail`, ts: stamp, type: "finding_detected", severity: "high",
+      scope: "own", tool, repo: `CloudCorpRecords/${tool}`,
+      title: `${tool} v${t.version}: ${res.failed} of ${res.total} tests failing in the board's own re-run`,
+      detail: `The board pipeline cloned the v${t.version} release tag, ran npm ci and the tool's own test suite, and ${res.failed} tests failed. Test counts on this board are produced by that re-run, so a red suite shows here as a danger, never as stale green.`,
+    });
+  } else if (res.state === "error") {
+    addEvent({
+      id: `tests-${tool}-${t.version}-error`, ts: stamp, type: "finding_detected", severity: "medium",
+      scope: "own", tool, repo: `CloudCorpRecords/${tool}`,
+      title: `${tool} v${t.version}: test cycle could not complete (${res.error ?? "unknown error"})`,
+      detail: `The board pipeline tried to re-run the v${t.version} test suite from the release tag and could not complete it. The tool card shows the error state until a later cycle succeeds; the previous counts are not presented as current.`,
+    });
+  } else if (prev && (prev.state === "fail" || prev.state === "error")) {
+    addEvent({
+      id: `tests-${tool}-${t.version}-green`, ts: stamp, type: "finding_resolved", severity: "resolved",
+      scope: "own", tool, repo: `CloudCorpRecords/${tool}`,
+      title: `${tool} v${t.version}: test suite green again in the board re-run (${res.passed} of ${res.total})`,
+      detail: `The board pipeline re-ran the v${t.version} suite from the release tag: ${res.passed} passed, ${res.failed} failed, in ${res.duration_s}s.`,
+    });
+  }
+}
+
+// 6. merge, cap, archive, write on change only.
 if (newEvents.length) {
   eventsDoc.events = [...newEvents, ...events].sort((a, b) => (a.ts < b.ts ? 1 : -1));
   if (eventsDoc.events.length > MAX_EVENTS) {

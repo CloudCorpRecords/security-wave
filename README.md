@@ -9,11 +9,19 @@ no third-party assets. It renders three data files:
 - `data/events.json`: the dangers feed. Seeded with the program's real
   history (validation rounds, releases with npm-registry timestamps, the
   factory pinning waves) and appended to by the scheduled scan.
-- `data/status.json`: tool versions, the hand-verified problem-ledger
-  counters, corpus size, and the factory watchlist grid.
+- `data/status.json`: tool versions and test counts, the problem-ledger
+  counters, corpus size, and the factory watchlist grid. Every block in
+  this file is written by the pipeline from its source; none of it is
+  typed in by hand (see SELF-UPDATE.md).
 - `data/proofs.json`: the Cloudflare head-to-head proof section. Until the
-  proof pack's finalized files land it shows an honest benchmark-in-progress
-  state plus the sourced research findings.
+  proof pack commits its finalized file it shows an honest
+  benchmark-in-progress state plus the sourced research findings; when
+  the finalized fields land, the section flips with no page edit.
+- `ledger/problems.md`: the public problem ledger of record. The
+  validation process commits updates here as problems close; the
+  pipeline parses it on every run and derives the board's counters.
+- `ledger/program.md`: the program record (corpus, coverage, rounds),
+  same pattern: committed by the validation process, parsed every run.
 
 ## The pipeline
 
@@ -21,23 +29,31 @@ no third-party assets. It renders three data files:
 It installs the four published tools from npm, watches npm for version
 changes, re-scans the factory watchlist with actionpin and hookcheck, diffs
 against the stored grid, appends events for verdict changes, pin regressions,
-and finding deltas, and commits only when something changed. The workflow's
-own actions are SHA-pinned, and the repo audits PINNED under its own tool.
+and finding deltas, re-parses the committed records in `ledger/`, and, when a
+tool's version has changed since its test counts were recorded, clones the
+release tag and runs the tool's own test suite to produce fresh counts.
+A failed suite is a feed event, never stale green. It commits only when
+something changed. The workflow's own actions are SHA-pinned, and the repo
+audits PINNED under its own tool.
 
-`scripts/update-data.mjs` is the whole pipeline (Node >= 20, no dependencies).
-A manual dispatch accepts an `extra_repo` input (CloudCorpRecords namespace
-only) that is scanned once and reported in the feed either way.
+`scripts/update-data.mjs` is the pipeline and `scripts/parse-records.mjs`
+the record parsers (Node >= 20, no dependencies). A manual dispatch accepts
+an `extra_repo` input (CloudCorpRecords namespace only) that is scanned
+once and reported in the feed either way.
 
 Public accuracy rule, enforced by the pipeline's design: the scheduled scan
 only ever scans our own repos, so it can name them. Anything external is
-reported in aggregate only, and only from the hand-verified record.
+reported in aggregate only, and only from the verified record.
 
 ## Freshness
 
-Scans are live (15-minute cadence). Ledger counters are hand-exported from
-the validation ledger in the program workspace and carry their export date
-in `data/status.json`; they change when a validation round or fix pass
-closes, not on the scan cadence. The page states this split openly.
+Everything is live on the 15-minute cadence, and each section of the page
+carries its own stamp: last scan for the feed and grid, the ledger file's
+last commit time for the counters, the tested version and run time on each
+tool card, the pack date on proofs. Nothing is hand-exported. The full
+self-update loop, including the one human step that remains (the
+validation process commits the ledger, program record, and proof pack
+files as its work closes), is documented in SELF-UPDATE.md.
 
 Events are capped at the newest 500; overflow is archived by month under
 `data/archive/`.

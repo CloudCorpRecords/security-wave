@@ -1,69 +1,128 @@
 {
  "generated_at": "2026-10-22T15:16:08Z",
- "generated_by": "hand export from the workspace validation record (seed); the scheduled scan refreshes versions and the watchlist grid from public sources",
+ "generated_by": "scripts/update-data.mjs, the scheduled pipeline. Every block is derived from its named source; see SELF-UPDATE.md.",
  "tools": {
   "hookcheck": {
    "version": "0.1.15",
-   "tests": 308,
-   "tests_source": "Round 3 verification on v0.1.13 (308); v0.1.14 adds the P-111 suite, exact count lands with the Round 4 export",
+   "tests": {
+    "passed": 308,
+    "failed": 0,
+    "total": 308,
+    "state": "pass",
+    "tested_version": "0.1.13",
+    "tested_at": null,
+    "duration_s": null,
+    "note": "Carried from the Round 3 verification export. The pipeline re-runs the suite on the current version in its next pass."
+   },
    "npm": "https://www.npmjs.com/package/@reneturcios/hookcheck",
    "repo": "https://github.com/CloudCorpRecords/hookcheck",
    "blurb": "Persistence hook auditor: install scripts, agent config hooks, folderOpen tasks, MCP autostart."
   },
   "actionpin": {
    "version": "0.1.6",
-   "tests": 138,
-   "tests_source": "Round 3 verification on v0.1.6",
+   "tests": {
+    "passed": 138,
+    "failed": 0,
+    "total": 138,
+    "state": "pass",
+    "tested_version": "0.1.6",
+    "tested_at": null,
+    "duration_s": null,
+    "note": "Carried from the Round 3 verification export; matches the current version. The pipeline re-runs on the next version change."
+   },
    "npm": "https://www.npmjs.com/package/@reneturcios/actionpin",
    "repo": "https://github.com/CloudCorpRecords/actionpin",
    "blurb": "GitHub Actions SHA-pinning audit and fix. Mutable refs are how tj-actions happened."
   },
   "injectcheck": {
    "version": "0.1.13",
-   "tests": 363,
-   "tests_source": "Fix pass 2 report on v0.1.13",
+   "tests": {
+    "passed": 363,
+    "failed": 0,
+    "total": 363,
+    "state": "pass",
+    "tested_version": "0.1.13",
+    "tested_at": null,
+    "duration_s": null,
+    "note": "Carried from the fix pass 2 report; matches the current version. The pipeline re-runs on the next version change."
+   },
    "npm": "https://www.npmjs.com/package/@reneturcios/injectcheck",
    "repo": "https://github.com/CloudCorpRecords/injectcheck",
    "blurb": "Prompt-injection scanner for content agents read: issues, PRs, docs, comments."
   },
   "tracewatch": {
    "version": "0.1.0",
-   "tests": 21,
-   "tests_source": "Counted from the repo test suite at export (5 test files)",
+   "tests": {
+    "passed": 21,
+    "failed": 0,
+    "total": 21,
+    "state": "pass",
+    "tested_version": "0.1.0",
+    "tested_at": null,
+    "duration_s": null,
+    "note": "Carried from the v0.1.0 ship export; matches the current version. The pipeline re-runs on the next version change."
+   },
    "npm": "https://www.npmjs.com/package/@reneturcios/tracewatch",
    "repo": "https://github.com/CloudCorpRecords/tracewatch",
    "blurb": "Observability and root cause: scan history, diffs, blame provenance, watch mode with measured time-to-detect."
   }
  },
  "ledger": {
-  "as_of": "2026-10-22",
-  "source": "validation/problems.md (P-001 to P-111), Round 3 verdict table, fix pass 2 close-outs",
+  "source": "ledger/problems.md in this repo (the public ledger of record), parsed by scripts/parse-records.mjs on every pipeline run",
+  "as_of": null,
   "found": 111,
-  "fixed_confirmed": 91,
-  "fixed_in_fixpass2": 6,
-  "fixed_unverified": 3,
-  "limits_documented": 6,
+  "fixed": 104,
+  "limits": 6,
+  "closed_no_repro": 1,
+  "open_total": 0,
+  "unknown_disposition": 0,
   "open_blocker": 0,
-  "open_real": 2,
-  "open_cosmetic": 3,
-  "open_detail": "Open REAL: P-070 (hookcheck giant-workflow output shape), P-075 (hookcheck trailing-whitespace anchor fragility). Open COSMETIC: P-073, P-074, P-076. Fix pass 2 release 2 and the Round 4 mini-validation are still running; counters refresh on the next hand export."
+  "open_real": 0,
+  "open_real_low": 0,
+  "open_cosmetic": 0,
+  "by_severity": {
+   "blocker": 3,
+   "real": 53,
+   "real_low": 34,
+   "cosmetic": 10,
+   "limit": 6,
+   "unranked": 5
+  },
+  "open_entries": [],
+  "missing_status": [],
+  "rounds": [
+   {
+    "round": "Round 2 verdicts (2026-10-22, published hookcheck 0.1.3, actionpin 0.1.2, injectcheck 0.1.3)",
+    "confirmed_fixed": 12,
+    "still_open": 1,
+    "limit": 3,
+    "rows": 17
+   }
+  ],
+  "open_detail": "Nothing is open. All 111 ledgered problems are closed: 104 fixed, 6 documented limits, 1 closed as not reproduced. The open bar now is the round verdict: solid still requires a full validation round with zero BLOCKER and zero unexplained REAL on the final binaries.",
+  "stale": false
  },
  "corpus": {
-  "files": 806,
-  "checks": 211,
-  "note": "Accumulated regression corpus: every failure ever caught, re-run in full before any release counts. 211 checks PASS on the current binaries."
+  "files": 810,
+  "checks": 223,
+  "note": "Accumulated regression corpus: every failure ever caught, re-run in full before any release counts. 223 checks PASS, 0 FAIL on the published binaries at the fix pass 2 close-out (files counted from the corpus tree at the same close-out).",
+  "as_of": null,
+  "stale": false
  },
  "rounds": {
   "latest": "Round 3",
   "verdict": "NOT SOLID",
+  "determinism": "10 of 10 target sets identical across 3 runs (Round 3)",
   "bar": "Solid requires a validation round with zero BLOCKER and zero unexplained REAL problems on the final binaries.",
-  "determinism": "10 of 10 target sets identical across 3 runs (Round 3)"
+  "note": "Round 4 mini-validation (the fix pass 2 close-out) is the next round; this record updates when it lands.",
+  "stale": false
  },
  "coverage": {
   "distinct_repos": 176,
   "mutations": 3569,
   "real_texts": 550,
-  "note": "Overnight totals: 176+ distinct real repos scanned, 3,569 verdict-stability mutations, 550 hand-labeled real issue and PR texts, 662 labeled dataset rows."
+  "note": "Overnight totals: 176+ distinct real repos scanned, 3,569 verdict-stability mutations, 550 hand-labeled real issue and PR texts, 662 labeled dataset rows.",
+  "stale": false
  },
  "watchlist": [
   {

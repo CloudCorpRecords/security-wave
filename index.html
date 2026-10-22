@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Security Wave: Live Danger Board</title>
-<meta name="description" content="Live danger tracking for the Security Wave: hookcheck, actionpin, injectcheck, tracewatch. Real-time findings on our own factory, proofs, and the hand-verified problem ledger.">
+<meta name="description" content="Live danger tracking for the Security Wave: hookcheck, actionpin, injectcheck, tracewatch. Real-time findings on our own factory, proofs, and the program problem ledger. Every number on this page is produced by the page's own pipeline; nothing is hand-exported.">
 <style>
   :root{
     --bg:#07090d; --panel:#0d1117; --panel2:#11161f; --line:#21262d; --line2:#2c333d;
@@ -126,7 +126,7 @@
   </section>
 
   <section id="feed">
-    <h2 class="sec"><span class="n">02</span> LIVE DANGERS FEED <span class="right">AUTO-REFRESH 60S · SCHEDULED SCAN EVERY 15 MIN</span></h2>
+    <h2 class="sec"><span class="n">02</span> LIVE DANGERS FEED <span class="right" id="feedstamp">SCHEDULED SCAN EVERY 15 MIN</span></h2>
     <div class="rule"><b>Public accuracy rule:</b> events about our own factory repos may name the repo and the finding. Events about external public repos are shown in aggregate only (counts and rule families, no repo names, no accusations) unless a verdict has been hand-verified into the published record.</div>
     <div class="filters" id="filters"></div>
     <div class="feed" id="feedlist"></div>
@@ -134,7 +134,7 @@
   </section>
 
   <section id="watchlist">
-    <h2 class="sec"><span class="n">03</span> FACTORY WATCHLIST <span class="right">OUR OWN REPOS, SCANNED BY OUR OWN TOOLS</span></h2>
+    <h2 class="sec"><span class="n">03</span> FACTORY WATCHLIST <span class="right" id="gridstamp">OUR OWN REPOS, SCANNED BY OUR OWN TOOLS</span></h2>
     <div class="gridbox"><table>
       <thead><tr><th>Repo</th><th>Head</th><th>actionpin</th><th>Pinned</th><th>hookcheck</th><th>Risky / inventoried</th><th>Checked</th></tr></thead>
       <tbody id="gridbody"></tbody>
@@ -153,6 +153,7 @@
       <div class="card"><h3>Disposition of every problem ever found</h3><div id="ledgerbars"></div><p class="note" id="ledgernote"></p></div>
       <div class="card"><h3>What is still open</h3><p id="opendetail"></p><p class="note">Solid, by the program's own bar, requires a validation round with zero BLOCKER and zero unexplained REAL problems on the final binaries. Until a round clears that bar, this board says NOT SOLID, in those words.</p></div>
     </div>
+    <p class="note">The full ledger is a committed file in this repo, <a href="ledger/problems.md">ledger/problems.md</a>: the public ledger of record, updated by the validation process as problems close. The counters above are parsed from that file by the pipeline on every run; they are never typed into this page or its data files by hand. Round verdict tables recorded inside the ledger: <span id="roundverdicts"></span></p>
   </section>
 
   <section id="about">
@@ -161,14 +162,14 @@
       <div class="card"><h3>Deterministic scanners, not vibes</h3><p>Every tool is a static, offline analyzer with a fixed rule set. Same input, same verdict: the validation program runs each target three times and hashes the output. No model is consulted at scan time, so a result can be re-run and argued with.</p></div>
       <div class="card"><h3>Hand-verified before it is claimed</h3><p>Findings are checked against source by a human-grade read before they enter the ledger: 2,785 actionpin findings verified line by line (100 percent accurate), 1,265 hookcheck findings presence-verified, every COMPROMISED verdict of the mega-corpus hand-read (30 of 30 were false alarms at the time, and the calibration fixes they forced are in the ledger).</p></div>
       <div class="card"><h3>Fixes before claims</h3><p>The wave's standing rule: if a tool still has problems, it gets updates until it is solid, and only then does marketing get its numbers. Every number on this page traces to a data file generated from a named source: the npm registry, the GitHub API, the validation ledger, or the scheduled scan itself.</p></div>
-      <div class="card"><h3>Freshness, stated plainly</h3><p>Scans are live: the watchlist grid, tool versions, and this feed refresh from the scheduled scan every 15 minutes. Ledger counters are hand-exported from the validation record and carry their export date; they move when a validation round or fix pass closes, not every quarter hour.</p></div>
+      <div class="card"><h3>Freshness: this page updates itself</h3><p>Nothing on this page is hand-exported. Every 15 minutes the pipeline re-reads npm, re-scans the watchlist, re-parses the committed ledger and program records in this repo, and re-runs a tool's full test suite from its release tag whenever the tool's version changes. Each section carries its own stamp: last scan for the feed and grid, the ledger file's last commit time for the counters, the tested version and time on each tool card, the pack date on proofs. The one human step left in the whole system: the validation process commits ledger and proof-pack updates as its work closes; everything downstream is automatic. The full loop is documented in <a href="SELF-UPDATE.md">SELF-UPDATE.md</a> in this repo.</p></div>
     </div>
   </section>
 
   <footer>
     Security Wave: hookcheck, actionpin, injectcheck, tracewatch. Built and run in the open by CloudCorpRecords.
-    Data sources: npm registry, GitHub API, the hand-verified validation ledger, and the scheduled scans of the published tools.
-    This page is static and self-contained: no trackers, no external fonts, no third-party scripts.
+    Data sources: npm registry, GitHub API, the committed ledger and program records in this repo, the tools' own test suites run from their release tags, and the scheduled scans of the published tools.
+    How every number here got here: <a href="SELF-UPDATE.md">SELF-UPDATE.md</a>. This page is static and self-contained: no trackers, no external fonts, no third-party scripts.
   </footer>
 </div>
 <script>
@@ -214,29 +215,48 @@ async function fetchJson(path){
   return r.json();
 }
 
+function testsChip(x){
+  const t = x.tests;
+  if(t == null) return `<span class="chip">tests n/a</span>`;
+  if(typeof t === "number") return `<span class="chip">${t} tests</span>`;
+  if(t.state === "pass") return `<span class="chip">${esc(t.passed ?? "?")} tests passing</span>`;
+  if(t.state === "fail") return `<span class="chip" style="color:var(--red);border-color:rgba(248,81,73,.5)">${esc(t.failed ?? "?")} of ${esc(t.total ?? "?")} tests FAILING</span>`;
+  return `<span class="chip" style="color:var(--orange);border-color:rgba(255,166,87,.5)">test cycle error</span>`;
+}
+function testsLine(x){
+  const t = x.tests;
+  if(!t || typeof t === "number") return "";
+  const when = t.tested_at ? ` · ran ${esc(rel(t.tested_at))}` : "";
+  const base = `tests as of v${esc(t.tested_version ?? "?")}${when} · re-run automatically on version change`;
+  if(t.state === "fail") return `<div class="mono" style="font-size:11px;color:var(--red);margin-top:8px">${base} · suite currently failing, see the feed</div>`;
+  if(t.state === "error") return `<div class="mono" style="font-size:11px;color:var(--orange);margin-top:8px">${base} · last cycle error: ${esc(t.error ?? "unknown")}</div>`;
+  return `<div class="mono" style="font-size:11px;color:var(--faint);margin-top:8px">${base}</div>`;
+}
 function renderTools(){
   const t = DOCS.status?.tools ?? {};
   $("toolcards").innerHTML = ORDER.map((name) => {
     const x = t[name] ?? {};
-    return `<div class="tool"><h3>${esc(name)} <span class="chip ver">v${esc(x.version ?? "?")}</span> <span class="chip">${esc(x.tests ?? "?")} tests</span></h3>
+    return `<div class="tool"><h3>${esc(name)} <span class="chip ver">v${esc(x.version ?? "?")}</span> ${testsChip(x)}</h3>
       <p>${esc(x.blurb ?? "")}</p>
       <div class="cmd">${esc(CMD[name])}</div>
-      <div class="links"><a href="${esc(x.repo ?? "#")}">GitHub</a><a href="${esc(x.npm ?? "#")}">npm</a><span class="mono" style="color:var(--faint)">CLI + MCP</span></div></div>`;
+      <div class="links"><a href="${esc(x.repo ?? "#")}">GitHub</a><a href="${esc(x.npm ?? "#")}">npm</a><span class="mono" style="color:var(--faint)">CLI + MCP</span></div>${testsLine(x)}</div>`;
   }).join("");
 }
 
 function renderStats(){
   const s = DOCS.status ?? {}; const L = s.ledger ?? {}; const C = s.corpus ?? {}; const V = s.coverage ?? {}; const R = s.rounds ?? {};
-  const fixed = (L.fixed_confirmed ?? 0) + (L.fixed_in_fixpass2 ?? 0) + (L.fixed_unverified ?? 0);
-  $("roundline").textContent = `LATEST: ${R.latest ?? ""} · VERDICT ${R.verdict ?? ""} · ${R.determinism ?? ""}`;
+  const fixed = L.fixed ?? ((L.fixed_confirmed ?? 0) + (L.fixed_in_fixpass2 ?? 0) + (L.fixed_unverified ?? 0));
+  const openReal = (L.open_real ?? 0) + (L.open_real_low ?? 0);
+  const stale = (b) => b ? " · STALE, last good values" : "";
+  $("roundline").textContent = `LATEST: ${R.latest ?? ""} · VERDICT ${R.verdict ?? ""} · ${R.determinism ?? ""}${R.stale ? " · STALE" : ""}`;
   const cell = (num, cls, lab, sub) => `<div class="stat"><div class="num ${cls}">${num}</div><div class="lab">${lab}</div><div class="sub">${sub}</div></div>`;
   $("stats").innerHTML =
-    cell(L.found ?? "?", "", "PROBLEMS LEDGERED", "every one hand-verified into the record") +
-    cell(fixed, "green", "CLOSED AS FIXED", `${L.fixed_confirmed ?? 0} confirmed on final binaries`) +
+    cell(L.found ?? "?", "", "PROBLEMS LEDGERED", "parsed from the committed ledger each run" + stale(L.stale)) +
+    cell(fixed, "green", "CLOSED AS FIXED", `${L.limits ?? L.limits_documented ?? 0} documented limits · ${L.closed_no_repro ?? 0} not reproduced`) +
     cell(L.open_blocker ?? "?", (L.open_blocker ? "red" : "green"), "BLOCKERS OPEN", "the bar is zero, and zero unexplained REAL") +
-    cell(L.open_real ?? "?", (L.open_real ? "orange" : "green"), "REAL PROBLEMS OPEN", "named in the ledger section below") +
-    cell((C.files ?? "?") + " / " + (C.checks ?? "?"), "", "CORPUS FILES / CHECKS", "accumulated regression corpus, all PASS") +
-    cell((V.distinct_repos ?? "?") + "+", "", "REAL REPOS SCANNED", `${V.mutations ?? "?"} mutations · ${V.real_texts ?? "?"} hand-labeled texts`);
+    cell(openReal, (openReal ? "orange" : "green"), "REAL PROBLEMS OPEN", "named in the ledger section below") +
+    cell((C.files ?? "?") + " / " + (C.checks ?? "?"), "", "CORPUS FILES / CHECKS", "accumulated regression corpus, all PASS" + stale(C.stale)) +
+    cell((V.distinct_repos ?? "?") + "+", "", "REAL REPOS SCANNED", `${V.mutations ?? "?"} mutations · ${V.real_texts ?? "?"} hand-labeled texts` + stale(V.stale));
 }
 
 function evVisible(e){
@@ -245,6 +265,8 @@ function evVisible(e){
   return e.type === FILTER;
 }
 function renderFeed(){
+  const lastScan = DOCS.status?.pipeline?.last_scan_at;
+  $("feedstamp").textContent = lastScan ? `LAST SCAN ${rel(lastScan).toUpperCase()} · EVERY 15 MIN · AUTO-REFRESH 60S` : "SCHEDULED SCAN EVERY 15 MIN";
   const evs = (DOCS.events?.events ?? []).filter(evVisible);
   $("feedlist").innerHTML = evs.length ? evs.map((e) => `
     <div class="ev"><div class="bar sev-${esc(e.severity ?? "info")}"></div>
@@ -267,6 +289,8 @@ function renderFilters(){
 
 function renderGrid(){
   const rows = DOCS.status?.watchlist ?? [];
+  const lastScan = DOCS.status?.pipeline?.last_scan_at;
+  $("gridstamp").textContent = lastScan ? `OUR OWN REPOS, SCANNED BY OUR OWN TOOLS · LAST SCAN ${rel(lastScan).toUpperCase()}` : "OUR OWN REPOS, SCANNED BY OUR OWN TOOLS";
   $("gridbody").innerHTML = rows.map((w) => {
     const ap = w.actionpin ?? {}, hc = w.hookcheck ?? {};
     return `<tr>
@@ -286,18 +310,37 @@ function kvTable(rows){
   return `<div class="gridbox"><table><thead><tr>${cols.map((c) => `<th>${esc(c)}</th>`).join("")}</tr></thead>
     <tbody>${rows.map((r) => `<tr>${cols.map((c) => `<td>${esc(r[c])}</td>`).join("")}</tr>`).join("")}</tbody></table></div>`;
 }
+function proofTable(title, block){
+  if(!block) return "";
+  const rows = block.rows ?? block;
+  if(!Array.isArray(rows) || !rows.length) return "";
+  const note = (!Array.isArray(block) && block.note) ? `<p class="note" style="margin-top:0">${esc(block.note)}</p>` : "";
+  return `<h3 style="margin-top:20px">${esc(title)}</h3>${note}${kvTable(rows)}`;
+}
 function renderProofs(){
   const p = DOCS.proofs ?? {};
-  $("proofstamp").textContent = p.generated_at ? "EXPORT " + p.generated_at.slice(0,10) : "";
+  $("proofstamp").textContent = p.generated_at ? "PACK " + p.generated_at.slice(0,10) : "";
   let h = "";
   if(p.status === "in_progress"){
     h += `<div class="banner"><b>${esc(p.headline ?? "Benchmark in progress")}.</b> ${esc(p.note ?? "")}</div>`;
+  } else if(p.headline){
+    h += `<div class="position" style="border-left-color:var(--green)"><b>${esc(p.headline)}</b>${p.note ? ` ${esc(p.note)}` : ""}</div>`;
   }
-  if(p.latency) h += `<h3>Measured latency</h3>${kvTable(p.latency.rows ?? p.latency)}`;
-  if(p.time_to_detect) h += `<h3>Time to detect</h3>${kvTable(p.time_to_detect.rows ?? p.time_to_detect)}`;
-  if(p.detection) h += `<h3>Detection on shared labeled sets</h3>${kvTable(p.detection.rows ?? p.detection)}`;
+  h += proofTable("Measured latency", p.latency);
+  h += proofTable("Time to detect", p.time_to_detect);
+  h += proofTable("Detection on shared labeled sets", p.detection);
+  const claims = p.claim_wording == null ? [] : (Array.isArray(p.claim_wording) ? p.claim_wording : [p.claim_wording]);
+  if(claims.length){
+    h += `<div class="card" style="margin:16px 0"><h3>Claim wording this data supports</h3>${claims.map((c) => `<p style="margin-top:6px">${esc(typeof c === "string" ? c : (c.text ?? JSON.stringify(c)))}</p>`).join("")}</div>`;
+  }
+  const hnotes = p.honesty_notes ?? [];
+  if(hnotes.length){
+    h += `<h3 style="margin-top:20px">Honesty notes</h3>` + hnotes.map((n) =>
+      typeof n === "string" ? `<p class="note" style="font-size:13.5px;color:var(--dim)">${esc(n)}</p>`
+        : `<p class="note" style="font-size:13.5px;color:var(--dim)"><b>${esc(n.title ?? "")}</b> ${esc(n.body ?? "")}</p>`).join("");
+  }
   if((p.research_points ?? []).length){
-    h += `<div class="cards">${p.research_points.map((r) => `<div class="card"><h3>${esc(r.title)}</h3><p>${esc(r.body)}</p><div class="src">Source: ${esc(r.source)}</div></div>`).join("")}</div>`;
+    h += `<div class="cards" style="margin-top:16px">${p.research_points.map((r) => `<div class="card"><h3>${esc(r.title)}</h3><p>${esc(r.body)}</p><div class="src">Source: ${esc(r.source)}</div></div>`).join("")}</div>`;
   }
   if(p.our_measured?.rows?.length){
     h += `<h3 style="margin-top:20px">Our side, measured (validation program)</h3><p class="note" style="margin-top:0">${esc(p.our_measured.note ?? "")}</p>${kvTable(p.our_measured.rows)}`;
@@ -305,24 +348,31 @@ function renderProofs(){
   if((p.tracks ?? []).length){
     h += `<h3 style="margin-top:20px">Benchmark design</h3>` + p.tracks.map((t) => `<p class="note" style="font-size:13.5px;color:var(--dim)">${esc(t)}</p>`).join("");
   }
-  h += `<p class="note">Research source: ${esc(p.source ?? "")}. The word faster appears in program claims only tied to a measured local wall-clock number or to this sourced detection-point record. No Cloudflare latency or accuracy figure is estimated, ever.</p>`;
+  h += `<p class="note">Research source: ${esc(p.source ?? "")}. This section renders entirely from data/proofs.json: when the proof pack commits its finalized file, the section flips out of the in-progress state with no page edit. The word faster appears in program claims only tied to a measured local wall-clock number or to this sourced detection-point record. No Cloudflare latency or accuracy figure is estimated, ever.</p>`;
   $("proofbody").innerHTML = h;
 }
 
 function renderLedger(){
   const L = DOCS.status?.ledger ?? {}; const total = L.found ?? 0;
-  $("ledgerstamp").textContent = "EXPORT " + (L.as_of ?? "") + " · SOURCE: " + (L.source ?? "");
+  const asOf = L.as_of ? abs(L.as_of) : "";
+  $("ledgerstamp").textContent = (asOf ? `LEDGER AS OF ${asOf}` : "LEDGER COMMIT TIME UNAVAILABLE") + (L.stale ? " · STALE: PARSE FAILED, SHOWING LAST GOOD VALUES" : "");
+  const fixed = L.fixed ?? ((L.fixed_confirmed ?? 0) + (L.fixed_in_fixpass2 ?? 0) + (L.fixed_unverified ?? 0));
   const rowsData = [
-    ["FIXED, confirmed on final binaries", L.fixed_confirmed ?? 0, "var(--green)"],
-    ["FIXED in fix pass 2 (Round 4 confirmation pending)", L.fixed_in_fixpass2 ?? 0, "#7ee787"],
-    ["FIXED, not yet re-verified", L.fixed_unverified ?? 0, "var(--yellow)"],
-    ["LIMIT, documented boundary", L.limits_documented ?? 0, "var(--blue)"],
-    ["OPEN, REAL", L.open_real ?? 0, "var(--orange)"],
+    ["FIXED (closed as fixed in the ledger)", fixed, "var(--green)"],
+    ["LIMIT, documented boundary", L.limits ?? L.limits_documented ?? 0, "var(--blue)"],
+    ["CLOSED, not reproduced", L.closed_no_repro ?? 0, "#7ee787"],
+    ["OPEN, REAL (incl. low)", (L.open_real ?? 0) + (L.open_real_low ?? 0), "var(--orange)"],
     ["OPEN, COSMETIC", L.open_cosmetic ?? 0, "var(--faint)"],
     ["OPEN, BLOCKER", L.open_blocker ?? 0, "var(--red)"]];
   $("ledgerbars").innerHTML = rowsData.map(([k, n, c]) =>
-    `<div class="bar-row"><span class="k">${esc(k)}</span><span class="bar-track"><span class="bar-fill" style="display:block;width:${total ? Math.max(1.5, 100 * n / total) : 0}%;background:${c}"></span></span><span>${n}</span></div>`).join("");
-  $("ledgernote").textContent = L.note ?? DOCS.status?.ledger?.source ?? "";
+    `<div class="bar-row"><span class="k">${esc(k)}</span><span class="bar-track"><span class="bar-fill" style="display:block;width:${total && n ? Math.max(1.5, 100 * n / total) : 0}%;background:${c}"></span></span><span>${n}</span></div>`).join("");
+  const sev = L.by_severity ?? {};
+  const sevLine = total ? `Totals by severity: ${sev.blocker ?? 0} BLOCKER, ${sev.real ?? 0} REAL, ${sev.real_low ?? 0} REAL low, ${sev.cosmetic ?? 0} COSMETIC, ${sev.limit ?? 0} LIMIT${sev.unranked ? `, plus ${sev.unranked} flywheel entries recorded with their fix version in place of a severity rank` : ""}. ` : "";
+  $("ledgernote").textContent = sevLine + "Counters are parsed from ledger/problems.md by the pipeline on every run. The ledger closes an entry only on evidence from the published binaries, per the validation program's rules.";
+  const rounds = L.rounds ?? [];
+  $("roundverdicts").textContent = rounds.length
+    ? rounds.map((r) => `${r.round}: ${r.confirmed_fixed} confirmed fixed, ${r.still_open} still open, ${r.limit} limits, of ${r.rows} rows (a snapshot of that round; later closes supersede it in the entries)`).join(" · ")
+    : "none recorded in the ledger yet";
   $("opendetail").textContent = L.open_detail ?? "";
 }
 

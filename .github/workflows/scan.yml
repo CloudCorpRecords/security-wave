@@ -3,8 +3,11 @@ name: danger-board-scan
 # Keeps the Live Danger Board current. Every 15 minutes (and on manual
 # dispatch) it installs the four published Security Wave tools, re-audits
 # the factory watchlist, watches npm for new tool releases, and commits a
-# data update only when something changed. All actions are SHA-pinned;
+# data update only when something changed. It also re-parses the committed
+# ledger and program records (ledger/) and re-runs a tool's test suite from
+# its release tag when its version changed. All actions are SHA-pinned;
 # this repo is audited by its own tooling (actionpin verdict: PINNED).
+# See SELF-UPDATE.md for the full self-update loop.
 
 on:
   schedule:
@@ -26,14 +29,25 @@ concurrency:
 jobs:
   scan:
     runs-on: ubuntu-latest
-    timeout-minutes: 25
+    timeout-minutes: 40
     steps:
       - name: Check out the board
         uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          # Full history: the pipeline stamps sections with the last commit
+          # time of ledger/problems.md and ledger/program.md.
+          fetch-depth: 0
       - name: Set up Node
         uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
         with:
           node-version: "20"
+      - name: Cache npm downloads for tool test cycles
+        uses: actions/cache@0057852bfaa89a56745cba8c7296529d2fc39830 # v4
+        with:
+          path: ~/.npm
+          key: sw-test-npm-${{ hashFiles('scripts/update-data.mjs') }}
+          restore-keys: |
+            sw-test-npm-
       - name: Install the published wave tools
         run: npm install -g @reneturcios/hookcheck @reneturcios/actionpin @reneturcios/injectcheck @reneturcios/tracewatch
       - name: Run the scan pipeline

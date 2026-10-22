@@ -1,5 +1,5 @@
 {
- "generated_at": "2026-10-22T16:20:15Z",
+ "generated_at": "2026-10-22T16:25:47Z",
  "generated_by": "scripts/update-data.mjs, the scheduled pipeline. Every block is derived from its named source; see SELF-UPDATE.md.",
  "tools": {
   "hookcheck": {
@@ -52,14 +52,13 @@
   "tracewatch": {
    "version": "0.1.0",
    "tests": {
+    "state": "pass",
     "passed": 21,
     "failed": 0,
     "total": 21,
-    "state": "pass",
-    "tested_version": null,
-    "tested_at": null,
-    "duration_s": null,
-    "note": "Last-tested version cleared deliberately to force a pipeline test cycle (self-update acceptance run)."
+    "tested_version": "0.1.0",
+    "tested_at": "2026-10-22T16:26:02Z",
+    "duration_s": 5
    },
    "npm": "https://www.npmjs.com/package/@reneturcios/tracewatch",
    "repo": "https://github.com/CloudCorpRecords/tracewatch",
@@ -99,22 +98,22 @@
     "rows": 17
    }
   ],
-  "open_detail": "Nothing is open. All 111 ledgered problems are closed: 104 fixed, 6 documented limits, 1 closed as not reproduced. The open bar now is the round verdict: solid still requires a full validation round with zero BLOCKER and zero unexplained REAL on the final binaries.",
+  "open_detail": "Nothing is open. All 111 ledgered problems are closed: 104 fixed, 6 documented limits, 1 closed as not reproduced. What remains is the round verdict itself: solid requires a validation round with zero BLOCKER and zero unexplained REAL on the final binaries, and the current round state is carried in the program record above.",
   "stale": false
  },
  "corpus": {
   "files": 810,
   "checks": 223,
-  "note": "Accumulated regression corpus: every failure ever caught, re-run in full before any release counts. 223 checks PASS, 0 FAIL on the published binaries at the fix pass 2 close-out (files counted from the corpus tree at the same close-out).",
-  "as_of": "2026-10-22T09:14:48-07:00",
+  "note": "Accumulated regression corpus: every failure ever caught, re-run in full before any release counts. 223 of 223 checks PASS on the final binaries at Round 4 (files counted from the corpus tree at the same close-out).",
+  "as_of": "2026-10-22T09:25:24-07:00",
   "stale": false
  },
  "rounds": {
-  "latest": "Round 3",
-  "verdict": "NOT SOLID",
-  "determinism": "10 of 10 target sets identical across 3 runs (Round 3)",
+  "latest": "Round 4",
+  "verdict": "SOLID",
+  "determinism": "10 of 10 target sets identical across 3 runs (Round 4, now including tracewatch)",
   "bar": "Solid requires a validation round with zero BLOCKER and zero unexplained REAL problems on the final binaries.",
-  "note": "Round 4 mini-validation (the fix pass 2 close-out) is the next round; this record updates when it lands.",
+  "note": "Round 4 (the fix pass 2 close-out) ran on the final binaries, hookcheck 0.1.16, actionpin 0.1.6, injectcheck 0.1.13, tracewatch 0.1.0: zero BLOCKER, zero unexplained REAL, zero FIXED-UNVERIFIED. Its headline tally over all 111 entries: FIXED-CONFIRMED 104, 1 closed as not reproduced (P-073), 6 documented limits. Source: validation/SUMMARY.md Round 4 headline and validation/round4/ROUND4-REPORT.md.",
   "stale": false
  },
  "coverage": {
@@ -135,7 +134,7 @@
     "mutable": 0,
     "branch": 0,
     "local": 0,
-    "checked_at": "2026-10-22T16:20:16.720Z"
+    "checked_at": "2026-10-22T16:25:48.867Z"
    },
    "hookcheck": {
     "verdict": "REVIEW",
@@ -143,7 +142,7 @@
     "safe": 5,
     "risky": 1,
     "unknown": 12,
-    "checked_at": "2026-10-22T16:20:16.776Z"
+    "checked_at": "2026-10-22T16:25:48.952Z"
    }
   },
   {
@@ -156,7 +155,7 @@
     "mutable": 0,
     "branch": 0,
     "local": 0,
-    "checked_at": "2026-10-22T16:20:17.220Z"
+    "checked_at": "2026-10-22T16:25:49.456Z"
    },
    "hookcheck": {
     "verdict": "REVIEW",
@@ -164,7 +163,7 @@
     "safe": 4,
     "risky": 1,
     "unknown": 7,
-    "checked_at": "2026-10-22T16:20:17.265Z"
+    "checked_at": "2026-10-22T16:25:49.523Z"
    }
   },
   {
@@ -177,7 +176,7 @@
     "mutable": 0,
     "branch": 0,
     "local": 0,
-    "checked_at": "2026-10-22T16:20:17.686Z"
+    "checked_at": "2026-10-22T16:25:50.009Z"
    },
    "hookcheck": {
     "verdict": "REVIEW",
@@ -185,7 +184,7 @@
     "safe": 4,
     "risky": 1,
     "unknown": 7,
-    "checked_at": "2026-10-22T16:20:17.730Z"
+    "checked_at": "2026-10-22T16:25:50.078Z"
    }
   },
   {
@@ -198,7 +197,7 @@
     "mutable": 0,
     "branch": 0,
     "local": 0,
-    "checked_at": "2026-10-22T16:20:18.109Z"
+    "checked_at": "2026-10-22T16:25:50.615Z"
    },
    "hookcheck": {
     "verdict": "REVIEW",
@@ -206,7 +205,7 @@
     "safe": 4,
     "risky": 1,
     "unknown": 7,
-    "checked_at": "2026-10-22T16:20:18.153Z"
+    "checked_at": "2026-10-22T16:25:50.685Z"
    }
   },
   {
@@ -219,7 +218,7 @@
     "mutable": 0,
     "branch": 0,
     "local": 0,
-    "checked_at": "2026-10-22T16:20:18.565Z"
+    "checked_at": "2026-10-22T16:25:51.159Z"
    },
    "hookcheck": {
     "verdict": "REVIEW",
@@ -227,7 +226,7 @@
     "safe": 5,
     "risky": 1,
     "unknown": 7,
-    "checked_at": "2026-10-22T16:20:18.612Z"
+    "checked_at": "2026-10-22T16:25:51.229Z"
    }
   },
   {
@@ -240,7 +239,7 @@
     "mutable": 0,
     "branch": 0,
     "local": 0,
-    "checked_at": "2026-10-22T16:20:19.006Z"
+    "checked_at": "2026-10-22T16:25:51.762Z"
    },
    "hookcheck": {
     "verdict": "REVIEW",
@@ -248,7 +247,7 @@
     "safe": 5,
     "risky": 1,
     "unknown": 7,
-    "checked_at": "2026-10-22T16:20:19.054Z"
+    "checked_at": "2026-10-22T16:25:51.829Z"
    }
   },
   {
@@ -261,7 +260,7 @@
     "mutable": 0,
     "branch": 0,
     "local": 0,
-    "checked_at": "2026-10-22T16:20:19.449Z"
+    "checked_at": "2026-10-22T16:25:52.310Z"
    },
    "hookcheck": {
     "verdict": "REVIEW",
@@ -269,7 +268,7 @@
     "safe": 7,
     "risky": 1,
     "unknown": 8,
-    "checked_at": "2026-10-22T16:20:19.496Z"
+    "checked_at": "2026-10-22T16:25:52.384Z"
    }
   },
   {
@@ -282,7 +281,7 @@
     "mutable": 0,
     "branch": 0,
     "local": 0,
-    "checked_at": "2026-10-22T16:20:19.911Z"
+    "checked_at": "2026-10-22T16:25:52.913Z"
    },
    "hookcheck": {
     "verdict": "REVIEW",
@@ -290,7 +289,7 @@
     "safe": 2,
     "risky": 1,
     "unknown": 15,
-    "checked_at": "2026-10-22T16:20:19.962Z"
+    "checked_at": "2026-10-22T16:25:52.988Z"
    }
   },
   {
@@ -303,7 +302,7 @@
     "mutable": 0,
     "branch": 0,
     "local": 0,
-    "checked_at": "2026-10-22T16:20:21.162Z"
+    "checked_at": "2026-10-22T16:25:54.674Z"
    },
    "hookcheck": {
     "verdict": "REVIEW",
@@ -311,7 +310,7 @@
     "safe": 0,
     "risky": 11,
     "unknown": 37,
-    "checked_at": "2026-10-22T16:20:21.457Z"
+    "checked_at": "2026-10-22T16:25:55.115Z"
    }
   },
   {
@@ -324,7 +323,7 @@
     "mutable": 0,
     "branch": 0,
     "local": 0,
-    "checked_at": "2026-10-22T16:20:21.967Z"
+    "checked_at": "2026-10-22T16:25:55.770Z"
    },
    "hookcheck": {
     "verdict": "REVIEW",
@@ -332,7 +331,7 @@
     "safe": 4,
     "risky": 1,
     "unknown": 7,
-    "checked_at": "2026-10-22T16:20:22.013Z"
+    "checked_at": "2026-10-22T16:25:55.839Z"
    }
   },
   {
@@ -345,7 +344,7 @@
     "mutable": 0,
     "branch": 0,
     "local": 0,
-    "checked_at": "2026-10-22T16:20:22.423Z"
+    "checked_at": "2026-10-22T16:25:56.370Z"
    },
    "hookcheck": {
     "verdict": "REVIEW",
@@ -353,7 +352,7 @@
     "safe": 4,
     "risky": 1,
     "unknown": 7,
-    "checked_at": "2026-10-22T16:20:22.466Z"
+    "checked_at": "2026-10-22T16:25:56.438Z"
    }
   },
   {
@@ -366,7 +365,7 @@
     "mutable": 0,
     "branch": 0,
     "local": 0,
-    "checked_at": "2026-10-22T16:20:22.920Z"
+    "checked_at": "2026-10-22T16:25:57.046Z"
    },
    "hookcheck": {
     "verdict": "REVIEW",
@@ -374,7 +373,7 @@
     "safe": 4,
     "risky": 1,
     "unknown": 7,
-    "checked_at": "2026-10-22T16:20:22.965Z"
+    "checked_at": "2026-10-22T16:25:57.114Z"
    }
   },
   {
@@ -387,7 +386,7 @@
     "mutable": 0,
     "branch": 0,
     "local": 0,
-    "checked_at": "2026-10-22T16:20:23.390Z"
+    "checked_at": "2026-10-22T16:25:57.637Z"
    },
    "hookcheck": {
     "verdict": "REVIEW",
@@ -395,12 +394,12 @@
     "safe": 4,
     "risky": 1,
     "unknown": 7,
-    "checked_at": "2026-10-22T16:20:23.437Z"
+    "checked_at": "2026-10-22T16:25:57.705Z"
    }
   }
  ],
  "pipeline": {
-  "last_scan_at": "2026-10-22T16:20:15Z",
+  "last_scan_at": "2026-10-22T16:25:47Z",
   "interval_minutes": 15,
   "note": "Scans run every 15 minutes; the stamp moves when a scan changes the data."
  }

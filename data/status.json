@@ -56,10 +56,10 @@
     "failed": 0,
     "total": 21,
     "state": "pass",
-    "tested_version": "0.1.0",
+    "tested_version": null,
     "tested_at": null,
     "duration_s": null,
-    "note": "Carried from the v0.1.0 ship export; matches the current version. The pipeline re-runs on the next version change."
+    "note": "Last-tested version cleared deliberately to force a pipeline test cycle (self-update acceptance run)."
    },
    "npm": "https://www.npmjs.com/package/@reneturcios/tracewatch",
    "repo": "https://github.com/CloudCorpRecords/tracewatch",

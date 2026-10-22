@@ -3,6 +3,39 @@
  "seed": "program history, hand-exported 2026-10-22; live events appended by the scheduled scan",
  "events": [
   {
+   "id": "rel-depguard-0.1.0",
+   "ts": "2026-10-22T17:18:57Z",
+   "type": "release",
+   "severity": "low",
+   "scope": "own",
+   "tool": "depguard",
+   "repo": "CloudCorpRecords/depguard",
+   "title": "depguard v0.1.0 shipped",
+   "detail": "Security Wave tranche 2. npm publish recorded at this timestamp; shipcheck GO 10/10 across git tag, GitHub release, npm, MCP Registry, and GHCR. Registered on this board in the tranche 2 close-out; the pipeline tracks its versions and re-runs its tests on change from here."
+  },
+  {
+   "id": "rel-flowcheck-0.1.0",
+   "ts": "2026-10-22T17:18:21Z",
+   "type": "release",
+   "severity": "low",
+   "scope": "own",
+   "tool": "flowcheck",
+   "repo": "CloudCorpRecords/flowcheck",
+   "title": "flowcheck v0.1.0 shipped",
+   "detail": "Security Wave tranche 2. npm publish recorded at this timestamp; shipcheck GO 10/10 across git tag, GitHub release, npm, MCP Registry, and GHCR. Registered on this board in the tranche 2 close-out; the pipeline tracks its versions and re-runs its tests on change from here."
+  },
+  {
+   "id": "rel-mcpvet-0.1.0",
+   "ts": "2026-10-22T17:05:26Z",
+   "type": "release",
+   "severity": "low",
+   "scope": "own",
+   "tool": "mcpvet",
+   "repo": "CloudCorpRecords/mcpvet",
+   "title": "mcpvet v0.1.0 shipped",
+   "detail": "Security Wave tranche 2. npm publish recorded at this timestamp; shipcheck GO 10/10 across git tag, GitHub release, npm, MCP Registry, and GHCR. Registered on this board in the tranche 2 close-out; the pipeline tracks its versions and re-runs its tests on change from here."
+  },
+  {
    "id": "rel-hookcheck-0.1.16",
    "ts": "2026-10-22T16:15:39Z",
    "type": "release",

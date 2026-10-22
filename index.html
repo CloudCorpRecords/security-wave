@@ -176,12 +176,15 @@
 "use strict";
 const $ = (id) => document.getElementById(id);
 const esc = (s) => String(s ?? "").replace(/[&<>"']/g, (c) => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
-const ORDER = ["hookcheck", "actionpin", "injectcheck", "tracewatch"];
+const ORDER = ["hookcheck", "actionpin", "injectcheck", "tracewatch", "mcpvet", "depguard", "flowcheck"];
 const CMD = {
   hookcheck: "npx -y @reneturcios/hookcheck scan .",
   actionpin: "npx -y @reneturcios/actionpin audit .",
   injectcheck: "npx -y @reneturcios/injectcheck scan .",
-  tracewatch: "npx -y @reneturcios/tracewatch ingest ."
+  tracewatch: "npx -y @reneturcios/tracewatch ingest .",
+  mcpvet: "npx -y @reneturcios/mcpvet vet .",
+  depguard: "npx -y @reneturcios/depguard check .",
+  flowcheck: "npx -y @reneturcios/flowcheck audit ."
 };
 const TYPE_LABEL = {finding_detected:"FINDING", verdict_change:"VERDICT CHANGE", ref_move:"REF MOVE",
   pin_regression:"PIN REGRESSION", finding_resolved:"RESOLVED", watch_detection:"WATCH DETECTION",

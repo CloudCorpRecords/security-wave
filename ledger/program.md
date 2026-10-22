@@ -14,9 +14,9 @@ the parser keys on them.
 
 ## Corpus
 
-- Corpus files: 810
-- Corpus checks: 223
-- Corpus note: Accumulated regression corpus: every failure ever caught, re-run in full before any release counts. 223 of 223 checks PASS on the final binaries at Round 4 (files counted from the corpus tree at the same close-out).
+- Corpus files: 855
+- Corpus checks: 255
+- Corpus note: Accumulated regression corpus: every failure ever caught, re-run in full before any release counts. 223 of 223 checks PASS on the final binaries at Round 4; tranche 2 (mcpvet, depguard, flowcheck v0.1.0, shipped 2026-10-22) added 32 checks and 45 fixture files, 255 of 255 PASS on the final binaries at the tranche 2 close-out (files counted from the corpus tree at the same close-out).
 
 ## Coverage
 

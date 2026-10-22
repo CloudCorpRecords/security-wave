@@ -581,3 +581,67 @@ The original fix-pass coordinator ended after the release 2 resume agent shipped
 Round 4 watchlist note (not a problem entry): codingagentsystem/cas at full-clone scope verdicts COMPROMISED-PATTERN on hookcheck 0.1.16 (total 181), driven by exactly 4 findings, all CURL-PIPE-SH on `curl -sL https://sentry.io/get-cli/ | bash` inside vendor/ghostty/.github/workflows/release-tag.yml (line 285) and release-tip.yml (lines 87, 110, 133), hand-verified at those lines. This is a true-positive detection of a genuine download-and-execute installer pipe in a vendored third-party tree; the pipe sits outside every generalized installer shape, and the P-109 doctrine records that a pipe outside those shapes stays uncalibrated and severe. At the acceptance scope used by Rounds 2 to 3 and the v0.1.14 close-out (the repo without its vendor tree), cas verdicts REVIEW with total 33, matching those rounds exactly. No ledger entry is opened: the tool behaved as designed and documented. The remaining 22 watchlist estates all verdict REVIEW with zero ENV-EXFIL and zero CRED-EXFIL findings on 0.1.16 (validation/round4/raw/watchlist.json).
 
 Final ledger tally after Round 4 (111 entries, P-001 to P-111): FIXED-CONFIRMED 104, closed as NOT REPRODUCED with measurements 1 (P-073), LIMIT documented 6 (P-009, P-015, P-016, P-036, P-090, P-104, plus the LIMIT sub-shapes recorded inside the fixed P-100 and P-101), FIXED-UNREVERIFIED 0, OPEN 0 (BLOCKER 0, REAL 0, COSMETIC 0). Round 4 report: validation/round4/ROUND4-REPORT.md.
+
+---
+
+## mcpvet v0.1.0 ship pass (2026-10-22)
+
+### P-112 REAL (mcpvet) Shell capability pattern matched RegExp .exec() calls
+- Evidence: Dogfood on anthropics/skills algorithmic-art: CAP-SHELL-TOOL high fired from templates/generator_template.js, where the only exec-shaped text is a regular expression `.exec()` call on a color pattern. The shell capability regex used \bexec\s*\(, which matches any dotted .exec( method call.
+- Status: FIXED in v0.1.0 before publish. The pattern now requires exec not preceded by a word character or a dot ((?<![\w.])exec\s*\(); child_process.exec( still matches through the child_process alternative, and bare destructured exec( still matches. Regression tests in test/vet.test.ts (capability precision block): the regex-exec fixture yields no shell capability and no CAP-SHELL-TOOL; the bare exec control still yields both. Dogfood re-run: algorithmic-art verdicts VETTED.
+
+### P-113 LIMIT (mcpvet) Pattern literals in detector source read as the shapes they detect
+- Evidence: Dogfood on the factory's own repos (hookcheck, injectcheck, depguard, mcpvet itself): every critical was hand-read and is a detection pattern literal (for example mcpvet src/vet.ts carries the /dev/tcp/ and credential-store regexes it scans for) or a planted malicious-shaped test fixture in the scanned tree. A static text scanner cannot distinguish a payload from a string that describes the payload.
+- Status: LIMIT, documented in the mcpvet README scope section before ship. Verdicts on scanner source and fixture corpora are evidence for review, not compromise claims. No code change: suppressing matches inside string literals would blind the scanner to real payloads delivered as strings, which is the more common shape in the wild.
+
+
+---
+
+## depguard (tranche 2, found during the v0.1.0 build and validation, 2026-10-22)
+
+### P-130 REAL (depguard) Typosquat distance-2 rule flagged a package that is itself popular
+- Evidence: the first unit test run of the build flagged `express` itself as TYPOSQUAT-POSSIBLE (medium) because express is edit distance 2 from cypress in the bundled popular list. Any name that IS a popular name can sit at distance 1 or 2 from another popular name (react / react-dom family shapes), so a bare distance rule over the popular list false-positives on exactly the most legitimate names.
+- Why it matters: the tool's credibility rests on not crying wolf over the canonical packages. A medium on express in check_package output would be quoted against every other verdict.
+- Status: FIXED in v0.1.0 (pre-release; the fix landed before the first publish, so no published binary carries it). typosquatFindings never flags a name that is itself in the popular set, and distance-2 only fires against the popular list when the name is not already tied to the repo's own base set. Regression test: "P-130 regression: a name that IS popular is never a typosquat suspect" in test/core.test.ts (express verdicts CLEAR with zero findings, via check_package and via a snapshot containing both express and cypress).
+
+### P-131 REAL (depguard) The documented Shai-Hulud dropper name setup.mjs did not escalate an added install script
+- Evidence: acceptance fixture 2 (new dependency plus the repo's own package.json gaining `preinstall: node setup.mjs`) verdicted REVIEW, not HIGH-RISK, on the first run: the risky-content pattern for install scripts covered curl, URLs, credential paths, and env access, but not the dropper filename that SPEC.md and the public Shai-Hulud reporting name directly (the worm's preinstall dropper is setup.mjs).
+- Why it matters: fixture 2 is the canonical attack shape this tool exists to catch at PR time; grading it as a bare presence understates the one signal with a public IoC name attached.
+- Status: FIXED in v0.1.0 (pre-release). setup.mjs and setup.js joined the risky-content pattern for install scripts, with the IoC source recorded in a code comment. Fixture 2 verdicts HIGH-RISK on the offline core alone; the benign changed-script path stays medium unless the content is risky (test/core.test.ts fixtures 2 and 2b).
+
+### P-132 LIMIT (depguard) Root manifests only; nested workspace manifests are not inventoried
+- Evidence: depguard v0.1.0 loads only the root package.json and root lockfiles of the target path. Monorepo workspace packages (packages/*/package.json and their install scripts and dependency changes) are invisible to the diff. Scale is not the limit (a 30,001-entry lockfile completes in about 120 ms locally with caps reported); layout coverage is.
+- Status: LIMIT documented (README Limits section in v0.1.0: root manifests only, nested workspace package.json files and nested lockfiles are not inventoried).
+
+### P-133 REAL, low (depguard) Bundled popular list gaps false-flagged real packages tmp and cli-table in snapshot mode
+- Evidence: dogfood on a fresh shallow clone of facebook/react at build time: snapshot mode flagged `tmp` TYPOSQUAT-SUSPECT high (edit distance 1 from tap) and `cli-table` TYPOSQUAT-SUSPECT high (edit distance 1 from cli-table3). Hand-checked against react's package.json: both are real, long-standing dependencies (`"tmp": "^0.1.0"`, `"cli-table": "^0.3.1"`); tmp is itself a top-downloaded package the bundled list missed, and cli-table is the original of which cli-table3 is the successor fork.
+- Why it matters: in single-snapshot mode the popular list is the only reference set, so any real but unlisted name at distance 1 from a listed name reads as a typosquat. The diff mode signal (distance against the repo's own base set) is not affected.
+- Status: FIXED in v0.1.0 (pre-release). tmp and cli-table (plus temp) were added to the bundled list; both names now verdict CLEAR via check_package (regression test "P-133 regression" in test/core.test.ts), and the re-run dogfood of facebook/react verdicts REVIEW on one hand-verified true positive only (its own postinstall script). Residual: an unlisted real name at distance 1 can still flag in snapshot mode; that is the documented nature of a bundled-list signal, and the README states the list is a reference sample.
+
+### P-134 REAL, low (depguard) LOCK-MISSING fired on npm: alias dependencies
+- Evidence: same facebook/react dogfood: `eslint-plugin-react-hooks-published` was flagged LOCK-MISSING medium. Hand-checked: react's package.json declares it as `"npm:eslint-plugin-react-hooks@^5.2.0"`, an npm alias that resolves under the real package name in the lockfile, so no same-name lock entry should exist.
+- Status: FIXED in v0.1.0 (pre-release). LOCK-MISSING is skipped for non-registry range protocols (npm:, workspace:, file:, link:, git+, git:, github:, http). Regression test "P-134 regression: npm: alias deps do not draw LOCK-MISSING" in test/core.test.ts.
+
+---
+
+## flowcheck (tranche 2, build-time validation 2026-10-22)
+
+### P-150 REAL (flowcheck) YAML merge keys left unresolved, so fields inherited through `<<: *anchor` were invisible
+- Evidence: the acceptance fixture test/fixtures/extras/anchored.yml defines runs-on and timeout-minutes in an anchored `defaults` block merged into the job with `<<: *defaults`. The first build read the job through doc.toJS() without the parser's merge option, so the job carried a literal `<<` key, no timeout-minutes, and flowcheck reported FC-NO-TIMEOUT on a job that sets one. GitHub resolves merge keys, so any field carried by one (timeout, runs-on, permissions) was invisible to every rule.
+- Why it matters: anchors and merge keys are how large real estates share job scaffolding; missing them means both false findings (missing timeout) and missed findings (a merged self-hosted runs-on or a merged write grant).
+- Status: FIXED in v0.1.0 before publish. parseDocument now runs with merge: true; regression tests in test/core.test.ts ("YAML anchors and merge keys resolve" and the P-150 block) assert the anchored fixture produces zero findings and the plan sees the merged fields.
+
+### P-151 REAL (flowcheck) FC-JOB-GRANT-BROAD fired at full severity on grants consumed by opaque action steps
+- Evidence: dogfood on the local greenlight checkout. .github/workflows/greenlight-guard.yml grants pull-requests: write and its header comment documents why: the CloudCorpRecords/greenlight action step posts the PR comment. flowcheck 0.1.0 (pre-calibration) reported FC-JOB-GRANT-BROAD at medium claiming no step needs the grant, because a third-party action's token use is not visible in the workflow file.
+- Why it matters: most real jobs contain third-party actions; uncalibrated full-severity accusations on grants those actions may legitimately consume teach users to ignore the rule.
+- Status: FIXED in v0.1.0 before publish. When a job contains an opaque action step (an action outside the understood set), the finding drops to low and its message carries the caveat that the action may consume the grant and must be verified before removal. Transparent jobs keep full severity. Regression tests in test/core.test.ts (P-151 block, both directions). The greenlight-guard finding now reports low with the caveat.
+
+### P-152 REAL (flowcheck) Local composite actions and github-script steps were treated as transparent token consumers
+- Evidence: dogfood on usebruno/bruno at clone HEAD 2026-10-22. Jobs in tests-linux.yml (ssl-test, oauth1-tests) and benchmarks.yml grant checks: write and pull-requests: write and verdict FC-JOB-GRANT-BROAD at medium, but their steps are actions/checkout plus local composite actions under ./.github/actions/ (which run with the job token; their steps live in their own action.yml files) and, in benchmarks.yml, an actions/github-script step whose script is `require('./tests/benchmarks/utils/pr-comment.js')`, delegating the actual PR comment to a repo file. flaky-test-detector.yml is the same shape (github-script posting comments via github.rest). None of that token use is visible to YAML-level inference.
+- Why it matters: same failure as P-151 one level deeper, and local composites plus github-script delegation are the dominant shapes in large real estates (bruno reported 14 such mediums before the fix, 0 after; the two remaining bruno mediums are an FC-CACHE-POISON and an FC-NO-TOP-PERMISSIONS, both hand-verified against the YAML).
+- Status: FIXED in v0.1.0 before publish. Local composite action steps and actions/github-script steps count as opaque consumers for FC-JOB-GRANT-BROAD calibration (low plus caveat), alongside P-151's unknown actions. The boundary is documented in the README limits: flowcheck does not follow local composite action files or delegated scripts in v0.1.0. Regression test in test/core.test.ts (P-152 block).
+
+### P-153 COSMETIC (flowcheck) Early-close pipe test raced the writer on the Node 20 CI matrix
+- Evidence: first CI run of CloudCorpRecords/flowcheck (run 39820392551) passed on Node 24 and failed on Node 20 at test/pipe.test.ts:112, "expected SIGPIPE or exit 141, got code 1 signal null". The test destroyed the child's stdout on the first data chunk; on that runner the writer's single write was fully accepted by the kernel pipe buffer before the destroy landed, so no EPIPE occurred and the process exited with its verdict code (1 for the REVIEW estate). The CLI behaved honestly (a completed write means the bytes were delivered to the pipe, and the exit was not 0), but the test's expectation was racy rather than deterministic.
+- Why it matters: a racy contract test trains everyone to ignore the one regression test that guards the P-001/P-017/P-021 bug family.
+- Status: FIXED in v0.1.0 before publish. The harness now destroys the read end immediately at spawn, before the child finishes computing its report, so the first write deterministically hits a closed pipe and exits 141. The full suite (21 tests) passes locally on repeated runs and the fix is verified by the green CI matrix on both Node versions.

@@ -63,6 +63,24 @@
    "npm": "https://www.npmjs.com/package/@reneturcios/tracewatch",
    "repo": "https://github.com/CloudCorpRecords/tracewatch",
    "blurb": "Observability and root cause: scan history, diffs, blame provenance, watch mode with measured time-to-detect."
+  },
+  "mcpvet": {
+   "version": "0.1.0",
+   "npm": "https://www.npmjs.com/package/@reneturcios/mcpvet",
+   "repo": "https://github.com/CloudCorpRecords/mcpvet",
+   "blurb": "MCP server and skill vetting before install: dangerous capability combos, config autostart shapes, typosquat names. The ClawHavoc defense."
+  },
+  "depguard": {
+   "version": "0.1.0",
+   "npm": "https://www.npmjs.com/package/@reneturcios/depguard",
+   "repo": "https://github.com/CloudCorpRecords/depguard",
+   "blurb": "PR dependency early warning: new dependencies, install scripts, downgrades, typosquat names, lockfile drift. Offline core, registry signals opt-in."
+  },
+  "flowcheck": {
+   "version": "0.1.0",
+   "npm": "https://www.npmjs.com/package/@reneturcios/flowcheck",
+   "repo": "https://github.com/CloudCorpRecords/flowcheck",
+   "blurb": "Workflow least-privilege audit: missing or write-all permissions, pull_request_target with PR checkout, cache poisoning shapes."
   }
  },
  "ledger": {
@@ -396,6 +414,15 @@
     "unknown": 7,
     "checked_at": "2026-10-22T16:25:57.705Z"
    }
+  },
+  {
+   "repo": "CloudCorpRecords/mcpvet"
+  },
+  {
+   "repo": "CloudCorpRecords/depguard"
+  },
+  {
+   "repo": "CloudCorpRecords/flowcheck"
   }
  ],
  "pipeline": {

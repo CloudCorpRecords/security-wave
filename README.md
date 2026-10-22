@@ -3,6 +3,17 @@
 Public status board for the Security Wave (hookcheck, actionpin, injectcheck,
 tracewatch), served at https://cloudcorprecords.github.io/security-wave/
 
+The Security Wave is the security counterpart to [Greenlight](https://github.com/CloudCorpRecords/greenlight). Greenlight checks if an agent may contribute; the Security Wave checks if the repo an agent touches is trying to rob it. This repo is the wave's public status board and the record its pipeline maintains.
+
+## The tools
+
+- **[hookcheck](https://github.com/CloudCorpRecords/hookcheck)** (v0.1.16, [npm](https://www.npmjs.com/package/@reneturcios/hookcheck)): audits install hooks and agent autostart persistence in a repo (postinstall scripts, .claude hooks, .vscode tasks) for supply-chain backdoors
+- **[actionpin](https://github.com/CloudCorpRecords/actionpin)** (v0.1.6, [npm](https://www.npmjs.com/package/@reneturcios/actionpin)): audits GitHub Actions for mutable refs and pins them to full SHAs, so a moved tag cannot change what your CI runs
+- **[injectcheck](https://github.com/CloudCorpRecords/injectcheck)** (v0.1.13, [npm](https://www.npmjs.com/package/@reneturcios/injectcheck)): scans issues, PRs, docs and files an agent will read for prompt injection before the agent sees them
+- **[tracewatch](https://github.com/CloudCorpRecords/tracewatch)** (v0.1.0, [npm](https://www.npmjs.com/package/@reneturcios/tracewatch)): tracks security scans over time, diffs findings, blames the commit that introduced each one, and watches repos with measured time-to-detect
+- **[mcpvet](https://github.com/CloudCorpRecords/mcpvet)** (v0.1.0, [npm](https://www.npmjs.com/package/@reneturcios/mcpvet)): vets MCP servers and agent skills before you install them, auditing server and client configs, autostart entries, declared capabilities and bundled scripts for credential stealers, droppers and persistence shapes
+- **[depguard](https://github.com/CloudCorpRecords/depguard)** (v0.1.0, [npm](https://www.npmjs.com/package/@reneturcios/depguard)): dependency early warning at PR time: diffs package.json and lockfiles and flags new dependencies, newly added install scripts and typosquat-shaped names before the change merges
+
 The page is a single static `index.html` with no build step, no trackers, and
 no third-party assets. It renders three data files:
 

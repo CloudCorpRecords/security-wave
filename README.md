@@ -13,6 +13,7 @@ The Security Wave is the security counterpart to [Greenlight](https://github.com
 - **[tracewatch](https://github.com/CloudCorpRecords/tracewatch)** (v0.1.0, [npm](https://www.npmjs.com/package/@reneturcios/tracewatch)): tracks security scans over time, diffs findings, blames the commit that introduced each one, and watches repos with measured time-to-detect
 - **[mcpvet](https://github.com/CloudCorpRecords/mcpvet)** (v0.1.0, [npm](https://www.npmjs.com/package/@reneturcios/mcpvet)): vets MCP servers and agent skills before you install them, auditing server and client configs, autostart entries, declared capabilities and bundled scripts for credential stealers, droppers and persistence shapes
 - **[depguard](https://github.com/CloudCorpRecords/depguard)** (v0.1.0, [npm](https://www.npmjs.com/package/@reneturcios/depguard)): dependency early warning at PR time: diffs package.json and lockfiles and flags new dependencies, newly added install scripts and typosquat-shaped names before the change merges
+- **[flowcheck](https://github.com/CloudCorpRecords/flowcheck)** (v0.1.0, [npm](https://www.npmjs.com/package/@reneturcios/flowcheck)): GitHub Actions least-privilege audit covering missing or write-all permissions, pull_request_target shapes, and secrets exposed to fork contexts
 
 The page is a single static `index.html` with no build step, no trackers, and
 no third-party assets. It renders three data files:

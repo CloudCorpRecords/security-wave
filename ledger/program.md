@@ -16,7 +16,7 @@ the parser keys on them.
 
 - Corpus files: 810
 - Corpus checks: 223
-- Corpus note: Accumulated regression corpus: every failure ever caught, re-run in full before any release counts. 223 checks PASS, 0 FAIL on the published binaries at the fix pass 2 close-out (files counted from the corpus tree at the same close-out).
+- Corpus note: Accumulated regression corpus: every failure ever caught, re-run in full before any release counts. 223 of 223 checks PASS on the final binaries at Round 4 (files counted from the corpus tree at the same close-out).
 
 ## Coverage
 
@@ -27,8 +27,8 @@ the parser keys on them.
 
 ## Rounds
 
-- Rounds latest: Round 3
-- Rounds verdict: NOT SOLID
-- Rounds determinism: 10 of 10 target sets identical across 3 runs (Round 3)
+- Rounds latest: Round 4
+- Rounds verdict: SOLID
+- Rounds determinism: 10 of 10 target sets identical across 3 runs (Round 4, now including tracewatch)
 - Rounds bar: Solid requires a validation round with zero BLOCKER and zero unexplained REAL problems on the final binaries.
-- Rounds note: Round 4 mini-validation (the fix pass 2 close-out) is the next round; this record updates when it lands.
+- Rounds note: Round 4 (the fix pass 2 close-out) ran on the final binaries, hookcheck 0.1.16, actionpin 0.1.6, injectcheck 0.1.13, tracewatch 0.1.0: zero BLOCKER, zero unexplained REAL, zero FIXED-UNVERIFIED. Its headline tally over all 111 entries: FIXED-CONFIRMED 104, 1 closed as not reproduced (P-073), 6 documented limits. Source: validation/SUMMARY.md Round 4 headline and validation/round4/ROUND4-REPORT.md.

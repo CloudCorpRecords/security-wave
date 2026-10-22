@@ -125,8 +125,9 @@ function buildOpenDetail(o) {
   if (o.open_total === 0 && o.unknown_disposition === 0) {
     return `Nothing is open. All ${o.found} ledgered problems are closed: ${o.fixed} fixed, ` +
       `${o.limits} documented limits, ${o.closed_no_repro} closed as not reproduced. ` +
-      `The open bar now is the round verdict: solid still requires a full validation round ` +
-      `with zero BLOCKER and zero unexplained REAL on the final binaries.`;
+      `What remains is the round verdict itself: solid requires a validation round with ` +
+      `zero BLOCKER and zero unexplained REAL on the final binaries, and the current ` +
+      `round state is carried in the program record above.`;
   }
   const byKey = { BLOCKER: [], REAL: [], "REAL low": [], COSMETIC: [] };
   for (const e of o.open_entries) (byKey[e.severity] ??= []).push(`${e.id} (${e.title})`);

@@ -151,7 +151,7 @@
     <h2 class="sec"><span class="n">05</span> THE LEDGER, LIVE <span class="right" id="ledgerstamp"></span></h2>
     <div class="split">
       <div class="card"><h3>Disposition of every problem ever found</h3><div id="ledgerbars"></div><p class="note" id="ledgernote"></p></div>
-      <div class="card"><h3>What is still open</h3><p id="opendetail"></p><p class="note">Solid, by the program's own bar, requires a validation round with zero BLOCKER and zero unexplained REAL problems on the final binaries. Until a round clears that bar, this board says NOT SOLID, in those words.</p></div>
+      <div class="card"><h3>What is still open</h3><p id="opendetail"></p><p class="note">Solid, by the program's own bar, requires a validation round with zero BLOCKER and zero unexplained REAL problems on the final binaries. When no round has cleared that bar, this board says NOT SOLID, in those words. The current round and verdict stand in the program state section above, parsed from the committed program record.</p></div>
     </div>
     <p class="note">The full ledger is a committed file in this repo, <a href="ledger/problems.md">ledger/problems.md</a>: the public ledger of record, updated by the validation process as problems close. The counters above are parsed from that file by the pipeline on every run; they are never typed into this page or its data files by hand. Round verdict tables recorded inside the ledger: <span id="roundverdicts"></span></p>
   </section>

@@ -51,6 +51,14 @@ function dispositionOf(statusLine) {
   return "unknown";
 }
 
+// An entry counts as re-confirmed when its body carries a verdict line
+// from a later round, fix batch, fix pass, or resume pass that confirms
+// the fix (for example "- Round 4 verdict: FIXED-CONFIRMED, closing the
+// FIXED-UNVERIFIED flag from Round 3"). Derived from the file, like
+// everything else here.
+const VERDICT_LINE_RE = /^-\s+(Round \d+|Fix batch|Fix pass|Resume) verdict:/i;
+const VERDICT_CONFIRM_RE = /CONFIRMED|fully closed/i;
+
 export function parseLedger(text) {
   const lines = String(text).split(/\r?\n/);
   const entries = [];
@@ -65,7 +73,7 @@ export function parseLedger(text) {
         id: h[1], severity: sev ? sev.sev : "UNRANKED", sevKey: sev ? sev.key : "unranked",
         low: sev ? sev.low : false,
         tool: h[3], title: (h[4] || "").trim(),
-        status: null,
+        status: null, confirmed: false,
       };
       continue;
     }
@@ -76,6 +84,7 @@ export function parseLedger(text) {
       const sm = line.match(/^-\s+Status:\s*(.+)$/);
       if (sm) cur.status = sm[1];
     }
+    if (VERDICT_LINE_RE.test(line) && VERDICT_CONFIRM_RE.test(line)) cur.confirmed = true;
   }
   flush();
 
@@ -83,7 +92,7 @@ export function parseLedger(text) {
 
   const out = {
     found: entries.length,
-    fixed: 0, limits: 0, closed_no_repro: 0,
+    fixed: 0, fixed_confirmed: 0, limits: 0, closed_no_repro: 0,
     open_total: 0, unknown_disposition: 0,
     open_blocker: 0, open_real: 0, open_real_low: 0, open_cosmetic: 0,
     by_severity: { blocker: 0, real: 0, real_low: 0, cosmetic: 0, limit: 0, unranked: 0 },
@@ -96,7 +105,7 @@ export function parseLedger(text) {
     out.by_severity[e.sevKey] += 1;
     if (e.status === null) { out.missing_status.push(e.id); out.unknown_disposition += 1; continue; }
     const d = dispositionOf(e.status);
-    if (d === "fixed") out.fixed += 1;
+    if (d === "fixed") { out.fixed += 1; if (e.confirmed) out.fixed_confirmed += 1; }
     else if (d === "limit") out.limits += 1;
     else if (d === "closed_no_repro") out.closed_no_repro += 1;
     else if (d === "open") {

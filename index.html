@@ -252,7 +252,7 @@ function renderStats(){
   const cell = (num, cls, lab, sub) => `<div class="stat"><div class="num ${cls}">${num}</div><div class="lab">${lab}</div><div class="sub">${sub}</div></div>`;
   $("stats").innerHTML =
     cell(L.found ?? "?", "", "PROBLEMS LEDGERED", "parsed from the committed ledger each run" + stale(L.stale)) +
-    cell(fixed, "green", "CLOSED AS FIXED", `${L.limits ?? L.limits_documented ?? 0} documented limits · ${L.closed_no_repro ?? 0} not reproduced`) +
+    cell(fixed, "green", "CLOSED AS FIXED", `${L.limits ?? L.limits_documented ?? 0} documented limits · ${L.closed_no_repro ?? 0} not reproduced · ${L.fixed_confirmed ?? 0} re-confirmed by later rounds`) +
     cell(L.open_blocker ?? "?", (L.open_blocker ? "red" : "green"), "BLOCKERS OPEN", "the bar is zero, and zero unexplained REAL") +
     cell(openReal, (openReal ? "orange" : "green"), "REAL PROBLEMS OPEN", "named in the ledger section below") +
     cell((C.files ?? "?") + " / " + (C.checks ?? "?"), "", "CORPUS FILES / CHECKS", "accumulated regression corpus, all PASS" + stale(C.stale)) +
@@ -368,7 +368,7 @@ function renderLedger(){
     `<div class="bar-row"><span class="k">${esc(k)}</span><span class="bar-track"><span class="bar-fill" style="display:block;width:${total && n ? Math.max(1.5, 100 * n / total) : 0}%;background:${c}"></span></span><span>${n}</span></div>`).join("");
   const sev = L.by_severity ?? {};
   const sevLine = total ? `Totals by severity: ${sev.blocker ?? 0} BLOCKER, ${sev.real ?? 0} REAL, ${sev.real_low ?? 0} REAL low, ${sev.cosmetic ?? 0} COSMETIC, ${sev.limit ?? 0} LIMIT${sev.unranked ? `, plus ${sev.unranked} flywheel entries recorded with their fix version in place of a severity rank` : ""}. ` : "";
-  $("ledgernote").textContent = sevLine + "Counters are parsed from ledger/problems.md by the pipeline on every run. The ledger closes an entry only on evidence from the published binaries, per the validation program's rules.";
+  $("ledgernote").textContent = sevLine + `Of the ${fixed} fixed entries, ${L.fixed_confirmed ?? 0} carry a verdict line from a later round or fix pass re-confirming the fix on the published binaries. ` + "Counters are parsed from ledger/problems.md by the pipeline on every run. The ledger closes an entry only on evidence from the published binaries, per the validation program's rules.";
   const rounds = L.rounds ?? [];
   $("roundverdicts").textContent = rounds.length
     ? rounds.map((r) => `${r.round}: ${r.confirmed_fixed} confirmed fixed, ${r.still_open} still open, ${r.limit} limits, of ${r.rows} rows (a snapshot of that round; later closes supersede it in the entries)`).join(" · ")

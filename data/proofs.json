@@ -1,8 +1,8 @@
 {
- "status": "in_progress",
- "generated_at": "2026-10-22T15:00:00Z",
- "headline": "Benchmark in progress",
- "note": "The head-to-head proof pack runs on the final binaries after the Round 4 close-out. Until its finalized files land, this section carries only the sourced research findings below. No measured comparison numbers are published yet, because none have been finalized.",
+ "status": "final",
+ "generated_at": "2026-10-22T16:22:36Z",
+ "headline": "Proof pack finalized",
+ "note": "Finalized 2026-10-22 after the Round 4 close-out (verdict SOLID), on the final published binaries: hookcheck 0.1.16, actionpin 0.1.6, injectcheck 0.1.13, tracewatch 0.1.0. Every number below comes from the proof pack files (security-wave/proof/cloudflare-headtohead/). Track A (replaying the same corpora through Cloudflare's live service) was not run: it requires an Enterprise account with the AI Security add-on or a configured AI Gateway, which we do not have. No Cloudflare latency or accuracy figure is estimated anywhere.",
  "source": "Research brief: security-wave/overnight/inbox/cloudflare/compare-research.md (every claim cited to a Cloudflare page)",
  "research_points": [
   {
@@ -32,22 +32,22 @@
   }
  ],
  "our_measured": {
-  "note": "Our side, from the validation program (finalized numbers, named source). These are scan times for whole estates, offline, on one VM, not per-request add-ons.",
+  "note": "Our side, from the Round 4 close-out on the final binaries (named source per row). These are whole-estate scan times at rest, offline, on one shared VM; they are not per-request add-ons and are never tabulated against Cloudflare's per-request figures.",
   "rows": [
    {
-    "target": "Full estate scans, all three tranche 1 tools (Round 1 and 2 corpora)",
-    "result": "0.92 to 1.59 s per scan including npx startup; PostHog's 1,372-action estate report in 1.48 s",
-    "source": "validation/SUMMARY.md"
+    "target": "Latency, time to detect, detection quality",
+    "result": "Tables above; medians and p95 from 5 runs per target, raw runs saved in the proof pack",
+    "source": "proof/cloudflare-headtohead/BENCHMARKS.md and latency-raw.json"
    },
    {
-    "target": "Determinism (Round 3)",
-    "result": "10 of 10 target sets identical across 3 runs; CLI and MCP agree 16 of 16",
-    "source": "validation/round3/ROUND3-REPORT.md"
+    "target": "Validation verdict (Round 4)",
+    "result": "SOLID: zero BLOCKER, zero unexplained REAL, zero COSMETIC open across the 111-entry ledger; 104 FIXED-CONFIRMED, 1 closed not-reproduced, 6 documented LIMITs",
+    "source": "validation/round4/ROUND4-REPORT.md"
    },
    {
-    "target": "Real GitHub text false positives (injectcheck, 550 hand-labeled texts)",
-    "result": "0 high and 0 medium false positives on the final binary; 144 low findings in 9 files",
-    "source": "overnight/MORNING-REPORT.md"
+    "target": "Cloudflare published points used in the comparison",
+    "result": "AI Gateway Guardrails adds about 500 ms per request at model-call time (their docs); AI Security for Apps publishes a 2 s analysis cap, no per-request latency and no injection accuracy, Enterprise add-on; no Cloudflare detection timeline is published for the npm compromise, Shai-Hulud, or tj-actions",
+    "source": "overnight/inbox/cloudflare/compare-research.md"
    }
   ]
  },
@@ -56,7 +56,117 @@
   "Track B: hook and persistence coverage. Cloudflare surface absent in docs; our coverage measured on the validation corpus.",
   "Track C: Actions pinning coverage. Cloudflare surface absent in docs; our coverage measured on 176+ real repos."
  ],
- "latency": null,
- "time_to_detect": null,
- "detection": null
+ "latency": [
+  {
+   "target": "actionpin audit, PostHog/posthog estate (1,384 actions, 139 workflow files)",
+   "median": "0.185 s",
+   "p95": "0.406 s",
+   "runs": "5"
+  },
+  {
+   "target": "hookcheck scan, github/docs estate (sparse clone, 214 findings)",
+   "median": "0.331 s",
+   "p95": "0.402 s",
+   "runs": "5"
+  },
+  {
+   "target": "hookcheck scan, microsoft/TypeScript estate (sparse clone, 102 findings)",
+   "median": "0.834 s",
+   "p95": "1.129 s",
+   "runs": "5"
+  },
+  {
+   "target": "hookcheck scan, All-Hands-AI/OpenHands estate (sparse clone, 113 findings)",
+   "median": "0.319 s",
+   "p95": "0.511 s",
+   "runs": "5"
+  },
+  {
+   "target": "injectcheck scan, 550 hand-labeled real texts (directory, about 4.3 ms per text)",
+   "median": "2.346 s",
+   "p95": "3.158 s",
+   "runs": "5"
+  },
+  {
+   "target": "injectcheck scan, deepset 662 rows as files (directory, about 0.42 ms per row)",
+   "median": "0.279 s",
+   "p95": "0.405 s",
+   "runs": "5"
+  },
+  {
+   "target": "injectcheck scan, one injected issue (A5 fixture, file)",
+   "median": "0.155 s",
+   "p95": "0.173 s",
+   "runs": "5"
+  },
+  {
+   "target": "injectcheck scan, 20 MB text file (file mode)",
+   "median": "9.941 s",
+   "p95": "14.860 s",
+   "runs": "5"
+  },
+  {
+   "target": "hookcheck scan, 91,980-step workflow estate (1,193 bytes of JSON out)",
+   "median": "4.468 s",
+   "p95": "5.742 s",
+   "runs": "5"
+  }
+ ],
+ "time_to_detect": [
+  {
+   "setup": "tracewatch watch, local directory, planted injected issue (A5 fixture)",
+   "interval": "5 s",
+   "time_to_detect": "8,060.8 ms",
+   "source": "ttd-tracewatch.json"
+  },
+  {
+   "setup": "tracewatch watch, local directory, planted injected issue (A5 fixture)",
+   "interval": "2 s",
+   "time_to_detect": "1,645.8 ms",
+   "source": "ttd-tracewatch.json"
+  },
+  {
+   "setup": "tracewatch watch, local directory, planted issue-1042.md, Round 4 demo 2026-10-22",
+   "interval": "2 s",
+   "time_to_detect": "1,037.5 ms",
+   "source": "detection-point-demo.json"
+  }
+ ],
+ "detection": [
+  {
+   "set": "Wild published payloads W1 to W8 (injectcheck 0.1.13)",
+   "result": "8 of 8 FINDINGS",
+   "scope": "In-scope agent-read content from public write-ups"
+  },
+  {
+   "set": "Wild published payloads W9 to W21, 13 payloads in 5 layouts each (injectcheck 0.1.13)",
+   "result": "11 FINDINGS in every layout; W14 and W17 CLEAN in every layout",
+   "scope": "W14 (bare link, secret-named parameter) and W17 (conditional sleeper) are documented LIMIT shapes with README scope lines"
+  },
+  {
+   "set": "550 hand-labeled real GitHub texts (injectcheck 0.1.13)",
+   "result": "0 high and 0 medium false positives; 144 low in 9 files",
+   "scope": "139 of the lows are one known convention (release-note mention pings), annotated in the finding detail"
+  },
+  {
+   "set": "deepset/prompt-injections, 662 rows (injectcheck 0.1.13, file mode)",
+   "result": "Legitimate (399): FINDINGS 0. Injections (263): FINDINGS 22 (8.4 percent), REVIEW 9",
+   "scope": "Most deepset positives are direct chatbot jailbreaks outside the tool's stated scope (ledger P-009); never quote the rate without this sentence"
+  },
+  {
+   "set": "InjecAgent base attacker instructions, 62 (injectcheck 0.1.13)",
+   "result": "FINDINGS 1, REVIEW 1, CLEAN 60; user controls 17 of 17 CLEAN",
+   "scope": "Documented limit P-104: bare instructions with no marker are textually identical to first-party requests"
+  },
+  {
+   "set": "Ever-COMPROMISED watchlist, 23 real estates (hookcheck 0.1.16)",
+   "result": "22 REVIEW; 1 COMPROMISED, a hand-verified true positive (vendored Sentry installer pipes in cas); zero ENV-EXFIL and zero CRED-EXFIL anywhere",
+   "scope": "Fresh clones, Round 4; the A1 Shai-Hulud control still verdicts COMPROMISED-PATTERN"
+  },
+  {
+   "set": "Accumulated regression corpus, all four tools",
+   "result": "223 of 223 checks PASS on the final binaries",
+   "scope": "Determinism 10 of 10 target sets identical across 3 runs, tracewatch included"
+  }
+ ]
 }

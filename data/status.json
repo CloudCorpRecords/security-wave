@@ -1,5 +1,5 @@
 {
- "generated_at": "2026-10-22T19:13:01Z",
+ "generated_at": "2026-10-22T22:21:55Z",
  "generated_by": "scripts/update-data.mjs, the scheduled pipeline. Every block is derived from its named source; see SELF-UPDATE.md.",
  "tools": {
   "hookcheck": {
@@ -179,7 +179,7 @@
     "mutable": 0,
     "branch": 0,
     "local": 0,
-    "checked_at": "2026-10-22T19:13:02.921Z"
+    "checked_at": "2026-10-22T22:21:57.105Z"
    },
    "hookcheck": {
     "verdict": "REVIEW",
@@ -187,7 +187,7 @@
     "safe": 5,
     "risky": 1,
     "unknown": 12,
-    "checked_at": "2026-10-22T19:13:03.000Z"
+    "checked_at": "2026-10-22T22:21:57.187Z"
    }
   },
   {
@@ -200,7 +200,7 @@
     "mutable": 0,
     "branch": 0,
     "local": 0,
-    "checked_at": "2026-10-22T19:13:03.255Z"
+    "checked_at": "2026-10-22T22:21:57.630Z"
    },
    "hookcheck": {
     "verdict": "REVIEW",
@@ -208,7 +208,7 @@
     "safe": 4,
     "risky": 1,
     "unknown": 7,
-    "checked_at": "2026-10-22T19:13:03.325Z"
+    "checked_at": "2026-10-22T22:21:57.696Z"
    }
   },
   {
@@ -221,7 +221,7 @@
     "mutable": 0,
     "branch": 0,
     "local": 0,
-    "checked_at": "2026-10-22T19:13:04.084Z"
+    "checked_at": "2026-10-22T22:21:58.134Z"
    },
    "hookcheck": {
     "verdict": "REVIEW",
@@ -229,7 +229,7 @@
     "safe": 4,
     "risky": 1,
     "unknown": 7,
-    "checked_at": "2026-10-22T19:13:04.155Z"
+    "checked_at": "2026-10-22T22:21:58.200Z"
    }
   },
   {
@@ -242,7 +242,7 @@
     "mutable": 0,
     "branch": 0,
     "local": 0,
-    "checked_at": "2026-10-22T19:13:04.444Z"
+    "checked_at": "2026-10-22T22:21:58.752Z"
    },
    "hookcheck": {
     "verdict": "REVIEW",
@@ -250,7 +250,7 @@
     "safe": 4,
     "risky": 1,
     "unknown": 7,
-    "checked_at": "2026-10-22T19:13:04.510Z"
+    "checked_at": "2026-10-22T22:21:58.817Z"
    }
   },
   {
@@ -263,7 +263,7 @@
     "mutable": 0,
     "branch": 0,
     "local": 0,
-    "checked_at": "2026-10-22T19:13:04.753Z"
+    "checked_at": "2026-10-22T22:21:59.285Z"
    },
    "hookcheck": {
     "verdict": "REVIEW",
@@ -271,7 +271,7 @@
     "safe": 5,
     "risky": 1,
     "unknown": 7,
-    "checked_at": "2026-10-22T19:13:04.821Z"
+    "checked_at": "2026-10-22T22:21:59.351Z"
    }
   },
   {
@@ -284,7 +284,7 @@
     "mutable": 0,
     "branch": 0,
     "local": 0,
-    "checked_at": "2026-10-22T19:13:05.100Z"
+    "checked_at": "2026-10-22T22:21:59.797Z"
    },
    "hookcheck": {
     "verdict": "REVIEW",
@@ -292,7 +292,7 @@
     "safe": 5,
     "risky": 1,
     "unknown": 7,
-    "checked_at": "2026-10-22T19:13:05.166Z"
+    "checked_at": "2026-10-22T22:21:59.865Z"
    }
   },
   {
@@ -305,7 +305,7 @@
     "mutable": 0,
     "branch": 0,
     "local": 0,
-    "checked_at": "2026-10-22T19:13:05.435Z"
+    "checked_at": "2026-10-22T22:22:00.358Z"
    },
    "hookcheck": {
     "verdict": "REVIEW",
@@ -313,7 +313,7 @@
     "safe": 7,
     "risky": 1,
     "unknown": 8,
-    "checked_at": "2026-10-22T19:13:05.501Z"
+    "checked_at": "2026-10-22T22:22:00.426Z"
    }
   },
   {
@@ -326,7 +326,7 @@
     "mutable": 0,
     "branch": 0,
     "local": 0,
-    "checked_at": "2026-10-22T19:13:05.754Z"
+    "checked_at": "2026-10-22T22:22:00.911Z"
    },
    "hookcheck": {
     "verdict": "REVIEW",
@@ -334,12 +334,12 @@
     "safe": 2,
     "risky": 1,
     "unknown": 15,
-    "checked_at": "2026-10-22T19:13:05.826Z"
+    "checked_at": "2026-10-22T22:22:00.986Z"
    }
   },
   {
    "repo": "CloudCorpRecords/xod",
-   "head": "55e3cfdb1d48",
+   "head": "bc2f89f82e41",
    "actionpin": {
     "verdict": "PINNED",
     "total": 23,
@@ -347,7 +347,7 @@
     "mutable": 0,
     "branch": 0,
     "local": 0,
-    "checked_at": "2026-10-22T19:13:06.976Z"
+    "checked_at": "2026-10-22T22:22:02.647Z"
    },
    "hookcheck": {
     "verdict": "REVIEW",
@@ -355,7 +355,7 @@
     "safe": 0,
     "risky": 11,
     "unknown": 37,
-    "checked_at": "2026-10-22T19:13:07.414Z"
+    "checked_at": "2026-10-22T22:22:03.086Z"
    }
   },
   {
@@ -368,7 +368,7 @@
     "mutable": 0,
     "branch": 0,
     "local": 0,
-    "checked_at": "2026-10-22T19:13:07.731Z"
+    "checked_at": "2026-10-22T22:22:03.748Z"
    },
    "hookcheck": {
     "verdict": "REVIEW",
@@ -376,7 +376,7 @@
     "safe": 4,
     "risky": 1,
     "unknown": 7,
-    "checked_at": "2026-10-22T19:13:07.795Z"
+    "checked_at": "2026-10-22T22:22:03.814Z"
    }
   },
   {
@@ -389,7 +389,7 @@
     "mutable": 0,
     "branch": 0,
     "local": 0,
-    "checked_at": "2026-10-22T19:13:08.070Z"
+    "checked_at": "2026-10-22T22:22:06.368Z"
    },
    "hookcheck": {
     "verdict": "REVIEW",
@@ -397,7 +397,7 @@
     "safe": 4,
     "risky": 1,
     "unknown": 7,
-    "checked_at": "2026-10-22T19:13:08.137Z"
+    "checked_at": "2026-10-22T22:22:06.433Z"
    }
   },
   {
@@ -410,7 +410,7 @@
     "mutable": 0,
     "branch": 0,
     "local": 0,
-    "checked_at": "2026-10-22T19:13:08.443Z"
+    "checked_at": "2026-10-22T22:22:06.972Z"
    },
    "hookcheck": {
     "verdict": "REVIEW",
@@ -418,7 +418,7 @@
     "safe": 4,
     "risky": 1,
     "unknown": 7,
-    "checked_at": "2026-10-22T19:13:08.509Z"
+    "checked_at": "2026-10-22T22:22:07.039Z"
    }
   },
   {
@@ -431,7 +431,7 @@
     "mutable": 0,
     "branch": 0,
     "local": 0,
-    "checked_at": "2026-10-22T19:13:08.774Z"
+    "checked_at": "2026-10-22T22:22:07.539Z"
    },
    "hookcheck": {
     "verdict": "REVIEW",
@@ -439,7 +439,7 @@
     "safe": 4,
     "risky": 1,
     "unknown": 7,
-    "checked_at": "2026-10-22T19:13:08.841Z"
+    "checked_at": "2026-10-22T22:22:07.605Z"
    }
   },
   {
@@ -451,7 +451,7 @@
     "mutable": 0,
     "branch": 0,
     "local": 0,
-    "checked_at": "2026-10-22T19:13:09.066Z"
+    "checked_at": "2026-10-22T22:22:08.076Z"
    },
    "hookcheck": {
     "verdict": "REVIEW",
@@ -459,7 +459,7 @@
     "safe": 4,
     "risky": 1,
     "unknown": 7,
-    "checked_at": "2026-10-22T19:13:09.138Z"
+    "checked_at": "2026-10-22T22:22:08.147Z"
    },
    "head": "e19ceed0896c"
   },
@@ -472,7 +472,7 @@
     "mutable": 0,
     "branch": 0,
     "local": 0,
-    "checked_at": "2026-10-22T19:13:09.377Z"
+    "checked_at": "2026-10-22T22:22:08.702Z"
    },
    "hookcheck": {
     "verdict": "REVIEW",
@@ -480,7 +480,7 @@
     "safe": 4,
     "risky": 1,
     "unknown": 7,
-    "checked_at": "2026-10-22T19:13:09.443Z"
+    "checked_at": "2026-10-22T22:22:08.772Z"
    },
    "head": "1b8b35d913e9"
   },
@@ -493,7 +493,7 @@
     "mutable": 0,
     "branch": 0,
     "local": 0,
-    "checked_at": "2026-10-22T19:13:09.682Z"
+    "checked_at": "2026-10-22T22:22:09.269Z"
    },
    "hookcheck": {
     "verdict": "REVIEW",
@@ -501,13 +501,13 @@
     "safe": 4,
     "risky": 1,
     "unknown": 7,
-    "checked_at": "2026-10-22T19:13:09.761Z"
+    "checked_at": "2026-10-22T22:22:09.340Z"
    },
    "head": "0d01dfeb3493"
   }
  ],
  "pipeline": {
-  "last_scan_at": "2026-10-22T19:13:01Z",
+  "last_scan_at": "2026-10-22T22:21:55Z",
   "interval_minutes": 15,
   "note": "Scans run every 15 minutes; the stamp moves when a scan changes the data."
  }

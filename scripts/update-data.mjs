@@ -25,6 +25,13 @@
 //      tag, runs npm ci and the tool's own test suite, and records the
 //      result. A failing suite is a danger event in the feed, never stale
 //      green. See SELF-UPDATE.md for the whole loop.
+//   7. Isolation: the test cycles in step 6 execute code from the tool
+//      repos, so in the workflow they run in a separate job with
+//      contents: read and no persisted credentials (scripts/
+//      run-test-cycles.mjs). This script then runs with TEST_RESULTS_PATH
+//      pointing at that job's artifact and only APPLIES the recorded
+//      results; it executes no tool code itself. Without TEST_RESULTS_PATH
+//      (local runs) it runs the cycles inline as before.
 //
 // Files are rewritten only when something actually changed, so the workflow
 // commits only on change. No dependencies beyond Node >= 20 and git.
@@ -34,6 +41,7 @@ import { spawnSync } from "node:child_process";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { parseLedger, parseProgram } from "./parse-records.mjs";
+import { runTestCycle } from "./test-cycle.mjs";
 
 const ROOT = process.cwd();
 const DATA = join(ROOT, "data");
@@ -287,43 +295,17 @@ if (extra && /^CloudCorpRecords\/[\w.-]+$/.test(extra) && !(status.watchlist ?? 
 // always produced by this pipeline from the published tag, never typed in.
 // A failed or errored cycle is recorded as a failed state and appends a
 // danger event; it never silently keeps the previous green.
-function parseTestCounts(text) {
-  // node:test summary lines, in both reporter shapes the runner emits:
-  // TAP ("# tests 21") and spec ("ℹ tests 21"). Either is authoritative.
-  const grab = (label) => {
-    const m = text.match(new RegExp(`^[#\\u2139] ${label} (\\d+)\\s*$`, "m"));
-    return m ? Number(m[1]) : null;
-  };
-  const total = grab("tests"), passed = grab("pass"), failed = grab("fail");
-  if (total != null && passed != null && failed != null) return { total, passed, failed };
-  const ok = (text.match(/^ok \d+/gm) || []).length;
-  const notOk = (text.match(/^not ok \d+/gm) || []).length;
-  if (ok + notOk > 0) return { total: ok + notOk, passed: ok, failed: notOk };
-  return null;
-}
-
-function runTestCycle(tool, version) {
-  const started = Date.now();
-  const tmp = mkdtempSync(join(tmpdir(), "swtest-"));
-  const dest = join(tmp, "repo");
-  const done = (state, extra = {}) => ({
-    state, passed: null, failed: null, total: null, ...extra,
-    tested_version: version, tested_at: nowIso(),
-    duration_s: Math.round((Date.now() - started) / 100) / 10,
-  });
-  try {
-    const clone = run("git", ["clone", "-q", "--depth", "1", "--branch", `v${version}`, `https://github.com/CloudCorpRecords/${tool}.git`, dest], { timeout: 300000 });
-    if (clone.status !== 0) return done("error", { error: `clone of tag v${version} failed` });
-    const ci = run("npm", ["ci", "--no-audit", "--no-fund", "--loglevel=error"], { timeout: 480000, cwd: dest });
-    if (ci.status !== 0) return done("error", { error: "npm ci failed on the release tag" });
-    const t = run("npm", ["test", "--silent"], { timeout: 600000, cwd: dest });
-    const counts = parseTestCounts(`${t.stdout ?? ""}\n${t.stderr ?? ""}`);
-    if (t.error || t.status == null) return done("error", { error: "test run timed out or was killed", ...(counts ?? {}) });
-    if (!counts) return done("error", { error: "test output unparsable (no test summary)" });
-    return done(counts.failed === 0 && t.status === 0 ? "pass" : "fail", counts);
-  } finally {
-    rmSync(tmp, { recursive: true, force: true });
-  }
+// The cycle runner itself lives in scripts/test-cycle.mjs (shared with
+// scripts/run-test-cycles.mjs). When TEST_RESULTS_PATH is set, the cycles
+// already ran in the isolated test-cycles job and this process only
+// applies their recorded results; a tool with no result for its current
+// version is deferred to a later cycle rather than executed here, in the
+// job that holds the write token.
+const testResultsPath = (process.env.TEST_RESULTS_PATH ?? "").trim();
+let testResults = null;
+if (testResultsPath) {
+  try { testResults = loadJson(testResultsPath); }
+  catch { console.log(`test results artifact unreadable at ${testResultsPath}; deferring all test cycles`); testResults = {}; }
 }
 
 for (const [tool, t] of Object.entries(status.tools ?? {})) {
@@ -331,7 +313,17 @@ for (const [tool, t] of Object.entries(status.tools ?? {})) {
   const prevTested = prev?.tested_version ?? null;
   if (!t.version || prevTested === t.version) continue;
   console.log(`test cycle: ${tool} v${t.version} (recorded counts were from ${prevTested ?? "no recorded version"})`);
-  const res = runTestCycle(tool, t.version);
+  let res;
+  if (testResults) {
+    res = testResults[tool] ?? null;
+    if (!res || res.tested_version !== t.version) {
+      console.log(`test cycle: ${tool} v${t.version} has no isolated result for this version; deferring to a later cycle`);
+      continue;
+    }
+    console.log(`test cycle: ${tool} v${t.version} applying isolated result ${res.state}`);
+  } else {
+    res = runTestCycle(tool, t.version);
+  }
   t.tests = res;
   changed = true;
   saveJson(STATUS_PATH, status);

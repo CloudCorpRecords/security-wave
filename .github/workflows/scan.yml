@@ -8,6 +8,13 @@ name: danger-board-scan
 # its release tag when its version changed. All actions are SHA-pinned;
 # this repo is audited by its own tooling (actionpin verdict: PINNED).
 # See SELF-UPDATE.md for the full self-update loop.
+#
+# Isolation: the test cycles execute code from the tool repos (npm ci
+# install scripts plus the full test suites), so they run in their own
+# job with contents: read and checkout credentials not persisted. That
+# job holds no write token. It passes its results to the scan job as a
+# workflow artifact (TEST_RESULTS_PATH); the scan job is the only job
+# with contents: write, and it only applies the recorded results.
 
 on:
   schedule:
@@ -20,23 +27,23 @@ on:
         type: string
 
 permissions:
-  contents: write
+  contents: read
 
 concurrency:
   group: danger-board-scan
   cancel-in-progress: false
 
 jobs:
-  scan:
+  test-cycles:
     runs-on: ubuntu-latest
     timeout-minutes: 40
+    permissions:
+      contents: read
     steps:
-      - name: Check out the board
+      - name: Check out the board (no persisted credentials)
         uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
         with:
-          # Full history: the pipeline stamps sections with the last commit
-          # time of ledger/problems.md and ledger/program.md.
-          fetch-depth: 0
+          persist-credentials: false
       - name: Set up Node
         uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
         with:
@@ -48,11 +55,44 @@ jobs:
           key: sw-test-npm-${{ hashFiles('scripts/update-data.mjs') }}
           restore-keys: |
             sw-test-npm-
+      - name: Run tool test cycles in isolation
+        run: node scripts/run-test-cycles.mjs --out test-results/test-results.json
+      - name: Pass test results to the scan job
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: board-test-results
+          path: test-results/test-results.json
+          if-no-files-found: error
+
+  scan:
+    needs: test-cycles
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    permissions:
+      contents: write
+    steps:
+      - name: Check out the board
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          # Full history: the pipeline stamps sections with the last commit
+          # time of ledger/problems.md and ledger/program.md. Credentials
+          # persist in this job only, because the commit step pushes.
+          fetch-depth: 0
+      - name: Set up Node
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+        with:
+          node-version: "20"
+      - name: Receive test results from the isolated job
+        uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4
+        with:
+          name: board-test-results
+          path: test-results
       - name: Install the published wave tools
         run: npm install -g @reneturcios/hookcheck @reneturcios/actionpin @reneturcios/injectcheck @reneturcios/tracewatch
       - name: Run the scan pipeline
         env:
           EXTRA_REPO: ${{ github.event.inputs.extra_repo }}
+          TEST_RESULTS_PATH: test-results/test-results.json
         run: node scripts/update-data.mjs
       - name: Commit data changes, if any
         run: |

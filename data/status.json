@@ -1,111 +1,110 @@
 {
- "generated_at": "2026-10-23T05:41:38Z",
+ "generated_at": "2026-10-23T09:26:54Z",
  "generated_by": "scripts/update-data.mjs, the scheduled pipeline. Every block is derived from its named source; see SELF-UPDATE.md.",
  "tools": {
   "hookcheck": {
-   "version": "0.1.17",
+   "version": "0.1.18",
    "tests": {
     "state": "pass",
-    "passed": 351,
+    "passed": 376,
     "failed": 0,
-    "total": 351,
-    "tested_version": "0.1.17",
-    "tested_at": "2026-10-23T05:42:58Z",
-    "duration_s": 68.3
+    "total": 376,
+    "tested_version": "0.1.18",
+    "tested_at": "2026-10-23T09:25:57Z",
+    "duration_s": 66.4
    },
    "npm": "https://www.npmjs.com/package/@reneturcios/hookcheck",
    "repo": "https://github.com/CloudCorpRecords/hookcheck",
    "blurb": "Persistence hook auditor: install scripts, agent config hooks, folderOpen tasks, MCP autostart."
   },
   "actionpin": {
-   "version": "0.1.6",
+   "version": "0.1.7",
    "tests": {
-    "passed": 138,
-    "failed": 0,
-    "total": 138,
     "state": "pass",
-    "tested_version": "0.1.6",
-    "tested_at": null,
-    "duration_s": null,
-    "note": "Carried from the Round 3 verification export; matches the current version. The pipeline re-runs on the next version change."
+    "passed": 157,
+    "failed": 0,
+    "total": 157,
+    "tested_version": "0.1.7",
+    "tested_at": "2026-10-23T09:26:01Z",
+    "duration_s": 4.1
    },
    "npm": "https://www.npmjs.com/package/@reneturcios/actionpin",
    "repo": "https://github.com/CloudCorpRecords/actionpin",
    "blurb": "GitHub Actions SHA-pinning audit and fix. Mutable refs are how tj-actions happened."
   },
   "injectcheck": {
-   "version": "0.1.14",
+   "version": "0.1.18",
    "tests": {
     "state": "pass",
-    "passed": 369,
+    "passed": 441,
     "failed": 0,
-    "total": 369,
-    "tested_version": "0.1.14",
-    "tested_at": "2026-10-23T05:43:08Z",
-    "duration_s": 9.8
+    "total": 441,
+    "tested_version": "0.1.18",
+    "tested_at": "2026-10-23T09:26:10Z",
+    "duration_s": 8
    },
    "npm": "https://www.npmjs.com/package/@reneturcios/injectcheck",
    "repo": "https://github.com/CloudCorpRecords/injectcheck",
    "blurb": "Prompt-injection scanner for content agents read: issues, PRs, docs, comments."
   },
   "tracewatch": {
-   "version": "0.1.1",
+   "version": "0.2.1",
    "tests": {
     "state": "pass",
-    "passed": 23,
+    "passed": 40,
     "failed": 0,
-    "total": 23,
-    "tested_version": "0.1.1",
-    "tested_at": "2026-10-23T05:43:13Z",
-    "duration_s": 4.8
+    "total": 40,
+    "tested_version": "0.2.1",
+    "tested_at": "2026-10-23T09:26:15Z",
+    "duration_s": 3.8
    },
    "npm": "https://www.npmjs.com/package/@reneturcios/tracewatch",
    "repo": "https://github.com/CloudCorpRecords/tracewatch",
    "blurb": "Observability and root cause: scan history, diffs, blame provenance, watch mode with measured time-to-detect."
   },
   "mcpvet": {
-   "version": "0.1.1",
+   "version": "0.1.3",
    "npm": "https://www.npmjs.com/package/@reneturcios/mcpvet",
    "repo": "https://github.com/CloudCorpRecords/mcpvet",
    "blurb": "MCP server and skill vetting before install: dangerous capability combos, config autostart shapes, typosquat names. The ClawHavoc defense.",
    "tests": {
     "state": "pass",
-    "passed": 22,
+    "passed": 44,
     "failed": 0,
-    "total": 22,
-    "tested_version": "0.1.1",
-    "tested_at": "2026-10-23T05:43:16Z",
-    "duration_s": 3.3
+    "total": 44,
+    "tested_version": "0.1.3",
+    "tested_at": "2026-10-23T09:26:19Z",
+    "duration_s": 2.5
    }
   },
   "depguard": {
-   "version": "0.1.0",
+   "version": "0.3.0",
    "npm": "https://www.npmjs.com/package/@reneturcios/depguard",
    "repo": "https://github.com/CloudCorpRecords/depguard",
    "blurb": "PR dependency early warning: new dependencies, install scripts, downgrades, typosquat names, lockfile drift. Offline core, registry signals opt-in.",
    "tests": {
     "state": "pass",
-    "passed": 27,
+    "passed": 42,
     "failed": 0,
-    "total": 27,
-    "tested_version": "0.1.0",
-    "tested_at": "2026-10-22T18:02:53Z",
-    "duration_s": 11
+    "total": 42,
+    "tested_version": "0.3.0",
+    "tested_at": "2026-10-23T09:26:28Z",
+    "duration_s": 8.7
    }
   },
   "flowcheck": {
-   "version": "0.1.0",
+   "version": "0.1.1",
    "npm": "https://www.npmjs.com/package/@reneturcios/flowcheck",
    "repo": "https://github.com/CloudCorpRecords/flowcheck",
    "blurb": "Workflow least-privilege audit: missing or write-all permissions, pull_request_target with PR checkout, cache poisoning shapes.",
    "tests": {
     "state": "pass",
-    "passed": 21,
+    "passed": 33,
     "failed": 0,
-    "total": 21,
-    "tested_version": "0.1.0",
-    "tested_at": "2026-10-22T18:02:57Z",
-    "duration_s": 4.2
+    "total": 33,
+    "tested_version": "0.1.1",
+    "tested_at": "2026-10-23T09:26:31Z",
+    "duration_s": 3.5
    }
   }
  },
@@ -170,7 +169,7 @@
  "watchlist": [
   {
    "repo": "CloudCorpRecords/greenlight",
-   "head": "a14ada17bbe5",
+   "head": "0a5a26a93312",
    "actionpin": {
     "verdict": "PINNED",
     "total": 13,
@@ -178,7 +177,7 @@
     "mutable": 0,
     "branch": 0,
     "local": 0,
-    "checked_at": "2026-10-23T05:41:40.584Z"
+    "checked_at": "2026-10-23T09:26:57.852Z"
    },
    "hookcheck": {
     "verdict": "REVIEW",
@@ -186,12 +185,12 @@
     "safe": 5,
     "risky": 1,
     "unknown": 12,
-    "checked_at": "2026-10-23T05:41:40.664Z"
+    "checked_at": "2026-10-23T09:26:57.942Z"
    }
   },
   {
    "repo": "CloudCorpRecords/shipcheck",
-   "head": "bdf6ee706eae",
+   "head": "13f213395030",
    "actionpin": {
     "verdict": "PINNED",
     "total": 8,
@@ -199,7 +198,7 @@
     "mutable": 0,
     "branch": 0,
     "local": 0,
-    "checked_at": "2026-10-23T05:41:41.152Z"
+    "checked_at": "2026-10-23T09:26:58.472Z"
    },
    "hookcheck": {
     "verdict": "REVIEW",
@@ -207,12 +206,12 @@
     "safe": 4,
     "risky": 1,
     "unknown": 7,
-    "checked_at": "2026-10-23T05:41:41.217Z"
+    "checked_at": "2026-10-23T09:26:58.541Z"
    }
   },
   {
    "repo": "CloudCorpRecords/cidiff",
-   "head": "b01a3b58c777",
+   "head": "d6c26c29932f",
    "actionpin": {
     "verdict": "PINNED",
     "total": 8,
@@ -220,7 +219,7 @@
     "mutable": 0,
     "branch": 0,
     "local": 0,
-    "checked_at": "2026-10-23T05:41:41.680Z"
+    "checked_at": "2026-10-23T09:26:59.026Z"
    },
    "hookcheck": {
     "verdict": "REVIEW",
@@ -228,12 +227,12 @@
     "safe": 4,
     "risky": 1,
     "unknown": 7,
-    "checked_at": "2026-10-23T05:41:41.745Z"
+    "checked_at": "2026-10-23T09:26:59.097Z"
    }
   },
   {
    "repo": "CloudCorpRecords/reprocheck",
-   "head": "814741640672",
+   "head": "0056ac9d96c9",
    "actionpin": {
     "verdict": "PINNED",
     "total": 8,
@@ -241,7 +240,7 @@
     "mutable": 0,
     "branch": 0,
     "local": 0,
-    "checked_at": "2026-10-23T05:41:42.184Z"
+    "checked_at": "2026-10-23T09:26:59.581Z"
    },
    "hookcheck": {
     "verdict": "REVIEW",
@@ -249,12 +248,12 @@
     "safe": 4,
     "risky": 1,
     "unknown": 7,
-    "checked_at": "2026-10-23T05:41:42.254Z"
+    "checked_at": "2026-10-23T09:26:59.652Z"
    }
   },
   {
    "repo": "CloudCorpRecords/prwatch",
-   "head": "98e072b243aa",
+   "head": "1f76e692c015",
    "actionpin": {
     "verdict": "PINNED",
     "total": 10,
@@ -262,7 +261,7 @@
     "mutable": 0,
     "branch": 0,
     "local": 0,
-    "checked_at": "2026-10-23T05:41:42.749Z"
+    "checked_at": "2026-10-23T09:27:00.109Z"
    },
    "hookcheck": {
     "verdict": "REVIEW",
@@ -270,12 +269,12 @@
     "safe": 5,
     "risky": 1,
     "unknown": 7,
-    "checked_at": "2026-10-23T05:41:42.814Z"
+    "checked_at": "2026-10-23T09:27:00.180Z"
    }
   },
   {
    "repo": "CloudCorpRecords/claimcheck",
-   "head": "0641df601ef5",
+   "head": "22d2b8cf14d8",
    "actionpin": {
     "verdict": "PINNED",
     "total": 10,
@@ -283,7 +282,7 @@
     "mutable": 0,
     "branch": 0,
     "local": 0,
-    "checked_at": "2026-10-23T05:41:43.341Z"
+    "checked_at": "2026-10-23T09:27:00.685Z"
    },
    "hookcheck": {
     "verdict": "REVIEW",
@@ -291,12 +290,12 @@
     "safe": 5,
     "risky": 1,
     "unknown": 7,
-    "checked_at": "2026-10-23T05:41:43.410Z"
+    "checked_at": "2026-10-23T09:27:00.757Z"
    }
   },
   {
    "repo": "CloudCorpRecords/gatefile",
-   "head": "796ef2280d2b",
+   "head": "4240335b0de6",
    "actionpin": {
     "verdict": "PINNED",
     "total": 10,
@@ -304,7 +303,7 @@
     "mutable": 0,
     "branch": 0,
     "local": 0,
-    "checked_at": "2026-10-23T05:41:43.878Z"
+    "checked_at": "2026-10-23T09:27:01.225Z"
    },
    "hookcheck": {
     "verdict": "REVIEW",
@@ -312,12 +311,12 @@
     "safe": 7,
     "risky": 1,
     "unknown": 8,
-    "checked_at": "2026-10-23T05:41:43.946Z"
+    "checked_at": "2026-10-23T09:27:01.308Z"
    }
   },
   {
    "repo": "CloudCorpRecords/pkgverdict",
-   "head": "d8817987400e",
+   "head": "8cfd9044e9b5",
    "actionpin": {
     "verdict": "PINNED",
     "total": 8,
@@ -325,7 +324,7 @@
     "mutable": 0,
     "branch": 0,
     "local": 0,
-    "checked_at": "2026-10-23T05:41:44.389Z"
+    "checked_at": "2026-10-23T09:27:01.828Z"
    },
    "hookcheck": {
     "verdict": "REVIEW",
@@ -333,7 +332,7 @@
     "safe": 2,
     "risky": 1,
     "unknown": 15,
-    "checked_at": "2026-10-23T05:41:44.464Z"
+    "checked_at": "2026-10-23T09:27:01.903Z"
    }
   },
   {
@@ -346,7 +345,7 @@
     "mutable": 0,
     "branch": 0,
     "local": 0,
-    "checked_at": "2026-10-23T05:41:46.012Z"
+    "checked_at": "2026-10-23T09:27:03.942Z"
    },
    "hookcheck": {
     "verdict": "REVIEW",
@@ -354,12 +353,12 @@
     "safe": 0,
     "risky": 11,
     "unknown": 37,
-    "checked_at": "2026-10-23T05:41:46.462Z"
+    "checked_at": "2026-10-23T09:27:04.412Z"
    }
   },
   {
    "repo": "CloudCorpRecords/hookcheck",
-   "head": "5b15c4ecf16c",
+   "head": "33fa58f833bc",
    "actionpin": {
     "verdict": "PINNED",
     "total": 8,
@@ -367,7 +366,7 @@
     "mutable": 0,
     "branch": 0,
     "local": 0,
-    "checked_at": "2026-10-23T05:41:47.092Z"
+    "checked_at": "2026-10-23T09:27:04.961Z"
    },
    "hookcheck": {
     "verdict": "REVIEW",
@@ -375,12 +374,12 @@
     "safe": 4,
     "risky": 1,
     "unknown": 7,
-    "checked_at": "2026-10-23T05:41:47.161Z"
+    "checked_at": "2026-10-23T09:27:05.043Z"
    }
   },
   {
    "repo": "CloudCorpRecords/actionpin",
-   "head": "0e3074535495",
+   "head": "04b7c5e42b2e",
    "actionpin": {
     "verdict": "PINNED",
     "total": 8,
@@ -388,7 +387,7 @@
     "mutable": 0,
     "branch": 0,
     "local": 0,
-    "checked_at": "2026-10-23T05:41:47.674Z"
+    "checked_at": "2026-10-23T09:27:05.549Z"
    },
    "hookcheck": {
     "verdict": "REVIEW",
@@ -396,12 +395,12 @@
     "safe": 4,
     "risky": 1,
     "unknown": 7,
-    "checked_at": "2026-10-23T05:41:47.741Z"
+    "checked_at": "2026-10-23T09:27:05.624Z"
    }
   },
   {
    "repo": "CloudCorpRecords/injectcheck",
-   "head": "f9e0643b6e3f",
+   "head": "f182283f2361",
    "actionpin": {
     "verdict": "PINNED",
     "total": 8,
@@ -409,7 +408,7 @@
     "mutable": 0,
     "branch": 0,
     "local": 0,
-    "checked_at": "2026-10-23T05:41:48.253Z"
+    "checked_at": "2026-10-23T09:27:06.165Z"
    },
    "hookcheck": {
     "verdict": "REVIEW",
@@ -417,12 +416,12 @@
     "safe": 4,
     "risky": 1,
     "unknown": 7,
-    "checked_at": "2026-10-23T05:41:48.322Z"
+    "checked_at": "2026-10-23T09:27:06.235Z"
    }
   },
   {
    "repo": "CloudCorpRecords/tracewatch",
-   "head": "8b8da984584d",
+   "head": "6a0f38ab0ce1",
    "actionpin": {
     "verdict": "PINNED",
     "total": 8,
@@ -430,7 +429,7 @@
     "mutable": 0,
     "branch": 0,
     "local": 0,
-    "checked_at": "2026-10-23T05:41:48.755Z"
+    "checked_at": "2026-10-23T09:27:06.716Z"
    },
    "hookcheck": {
     "verdict": "REVIEW",
@@ -438,7 +437,7 @@
     "safe": 4,
     "risky": 1,
     "unknown": 7,
-    "checked_at": "2026-10-23T05:41:48.821Z"
+    "checked_at": "2026-10-23T09:27:06.785Z"
    }
   },
   {
@@ -450,7 +449,7 @@
     "mutable": 0,
     "branch": 0,
     "local": 0,
-    "checked_at": "2026-10-23T05:41:49.362Z"
+    "checked_at": "2026-10-23T09:27:07.279Z"
    },
    "hookcheck": {
     "verdict": "REVIEW",
@@ -458,9 +457,9 @@
     "safe": 4,
     "risky": 1,
     "unknown": 7,
-    "checked_at": "2026-10-23T05:41:49.435Z"
+    "checked_at": "2026-10-23T09:27:07.363Z"
    },
-   "head": "c1f43e43410d"
+   "head": "ef06afc7dc4b"
   },
   {
    "repo": "CloudCorpRecords/depguard",
@@ -471,7 +470,7 @@
     "mutable": 0,
     "branch": 0,
     "local": 0,
-    "checked_at": "2026-10-23T05:41:49.837Z"
+    "checked_at": "2026-10-23T09:27:07.832Z"
    },
    "hookcheck": {
     "verdict": "REVIEW",
@@ -479,9 +478,9 @@
     "safe": 4,
     "risky": 1,
     "unknown": 7,
-    "checked_at": "2026-10-23T05:41:49.902Z"
+    "checked_at": "2026-10-23T09:27:07.902Z"
    },
-   "head": "1b8b35d913e9"
+   "head": "069a8a404b90"
   },
   {
    "repo": "CloudCorpRecords/flowcheck",
@@ -492,7 +491,7 @@
     "mutable": 0,
     "branch": 0,
     "local": 0,
-    "checked_at": "2026-10-23T05:41:50.324Z"
+    "checked_at": "2026-10-23T09:27:08.412Z"
    },
    "hookcheck": {
     "verdict": "REVIEW",
@@ -500,13 +499,13 @@
     "safe": 4,
     "risky": 1,
     "unknown": 7,
-    "checked_at": "2026-10-23T05:41:50.396Z"
+    "checked_at": "2026-10-23T09:27:08.487Z"
    },
-   "head": "0d01dfeb3493"
+   "head": "b334bef2d385"
   }
  ],
  "pipeline": {
-  "last_scan_at": "2026-10-23T05:41:38Z",
+  "last_scan_at": "2026-10-23T09:26:54Z",
   "interval_minutes": 15,
   "note": "Scans run every 15 minutes; the stamp moves when a scan changes the data."
  }

@@ -1,7 +1,51 @@
 {
- "generated_at": "2026-10-22T16:15:39Z",
+ "generated_at": "2026-10-23T05:41:38Z",
  "seed": "program history, hand-exported 2026-10-22; live events appended by the scheduled scan",
  "events": [
+  {
+   "id": "rel-mcpvet-0.1.1",
+   "ts": "2026-10-23T05:41:38Z",
+   "type": "release",
+   "severity": "low",
+   "scope": "own",
+   "tool": "mcpvet",
+   "repo": "CloudCorpRecords/mcpvet",
+   "title": "mcpvet v0.1.1 shipped",
+   "detail": "npm latest moved from v0.1.0 to v0.1.1. Detected by the scheduled scan from the npm registry; see the tool repo for the release notes."
+  },
+  {
+   "id": "rel-tracewatch-0.1.1",
+   "ts": "2026-10-23T05:41:38Z",
+   "type": "release",
+   "severity": "low",
+   "scope": "own",
+   "tool": "tracewatch",
+   "repo": "CloudCorpRecords/tracewatch",
+   "title": "tracewatch v0.1.1 shipped",
+   "detail": "npm latest moved from v0.1.0 to v0.1.1. Detected by the scheduled scan from the npm registry; see the tool repo for the release notes."
+  },
+  {
+   "id": "rel-injectcheck-0.1.14",
+   "ts": "2026-10-23T05:41:38Z",
+   "type": "release",
+   "severity": "low",
+   "scope": "own",
+   "tool": "injectcheck",
+   "repo": "CloudCorpRecords/injectcheck",
+   "title": "injectcheck v0.1.14 shipped",
+   "detail": "npm latest moved from v0.1.13 to v0.1.14. Detected by the scheduled scan from the npm registry; see the tool repo for the release notes."
+  },
+  {
+   "id": "rel-hookcheck-0.1.17",
+   "ts": "2026-10-23T05:41:38Z",
+   "type": "release",
+   "severity": "low",
+   "scope": "own",
+   "tool": "hookcheck",
+   "repo": "CloudCorpRecords/hookcheck",
+   "title": "hookcheck v0.1.17 shipped",
+   "detail": "npm latest moved from v0.1.16 to v0.1.17. Detected by the scheduled scan from the npm registry; see the tool repo for the release notes."
+  },
   {
    "id": "rel-depguard-0.1.0",
    "ts": "2026-10-22T17:18:57Z",
@@ -91,17 +135,6 @@
    "detail": "First release of the wave's fourth tool: scan history with stable finding IDs, scan diffs, blame provenance to the introducing commit and PR, watch mode with measured time-to-detect."
   },
   {
-   "id": "fix-frontier",
-   "ts": "2026-10-22T14:03:45Z",
-   "type": "finding_resolved",
-   "severity": "resolved",
-   "scope": "program",
-   "tool": "injectcheck",
-   "repo": null,
-   "title": "Frontier closed in injectcheck v0.1.13 (P-100 to P-103, P-080)",
-   "detail": "Render-channel exfiltration, behavior hijack, spoiler-hidden code theft and destructive instruction sets went from 0 of 11 payloads detected to detected in all 5 layouts for 9 of 11; the 2 sub-shapes with no honest deterministic surface (Slack AI render shape, abstract tool shadowing) were reclassified as documented LIMITs with README scope lines. Guardrails held: 0 high or medium false positives on 550 hand-labeled real texts."
-  },
-  {
    "id": "rel-injectcheck-0.1.13",
    "ts": "2026-10-22T14:03:45Z",
    "type": "release",
@@ -113,15 +146,15 @@
    "detail": "Frontier pass: render-channel, behavior-hijack, code-theft and destructive instruction shapes detected; sub-shapes with no deterministic surface reclassified as documented LIMITs. P-100 to P-103 and P-080 closed. 363 tests."
   },
   {
-   "id": "fix-p111",
-   "ts": "2026-10-22T13:39:26Z",
+   "id": "fix-frontier",
+   "ts": "2026-10-22T14:03:45Z",
    "type": "finding_resolved",
    "severity": "resolved",
    "scope": "program",
-   "tool": "hookcheck",
+   "tool": "injectcheck",
    "repo": null,
-   "title": "P-111 closed in hookcheck v0.1.14",
-   "detail": "The last open COMPROMISED driver: a git credential.helper handing a repo its own push token was read as disclosure. Hand-classified authentication-shaped in Round 3; fixed test-first and re-verified on the published binary, with the ever-COMPROMISED watchlist re-run clean of unexplained verdicts."
+   "title": "Frontier closed in injectcheck v0.1.13 (P-100 to P-103, P-080)",
+   "detail": "Render-channel exfiltration, behavior hijack, spoiler-hidden code theft and destructive instruction sets went from 0 of 11 payloads detected to detected in all 5 layouts for 9 of 11; the 2 sub-shapes with no honest deterministic surface (Slack AI render shape, abstract tool shadowing) were reclassified as documented LIMITs with README scope lines. Guardrails held: 0 high or medium false positives on 550 hand-labeled real texts."
   },
   {
    "id": "rel-hookcheck-0.1.14",
@@ -133,6 +166,17 @@
    "repo": "CloudCorpRecords/hookcheck",
    "title": "hookcheck v0.1.14 shipped",
    "detail": "A credential handed to git through credential.helper is an auth position, not a disclosure. P-111 closed."
+  },
+  {
+   "id": "fix-p111",
+   "ts": "2026-10-22T13:39:26Z",
+   "type": "finding_resolved",
+   "severity": "resolved",
+   "scope": "program",
+   "tool": "hookcheck",
+   "repo": null,
+   "title": "P-111 closed in hookcheck v0.1.14",
+   "detail": "The last open COMPROMISED driver: a git credential.helper handing a repo its own push token was read as disclosure. Hand-classified authentication-shaped in Round 3; fixed test-first and re-verified on the published binary, with the ever-COMPROMISED watchlist re-run clean of unexplained verdicts."
   },
   {
    "id": "hist-round3",
@@ -553,17 +597,6 @@
    "detail": "First release: prompt-injection scanner for content agents read (issues, PRs, docs)."
   },
   {
-   "id": "rel-actionpin-0.1.0",
-   "ts": "2026-10-22T04:10:49Z",
-   "type": "release",
-   "severity": "low",
-   "scope": "own",
-   "tool": "actionpin",
-   "repo": "CloudCorpRecords/actionpin",
-   "title": "actionpin v0.1.0 shipped",
-   "detail": "First release: GitHub Actions SHA-pinning audit and fix, CLI plus MCP."
-  },
-  {
    "id": "rel-hookcheck-0.1.0",
    "ts": "2026-10-22T04:10:49Z",
    "type": "release",
@@ -573,6 +606,17 @@
    "repo": "CloudCorpRecords/hookcheck",
    "title": "hookcheck v0.1.0 shipped",
    "detail": "First release: persistence hook auditor. Install scripts, .claude hooks, .vscode folderOpen tasks, husky, MCP autostart."
+  },
+  {
+   "id": "rel-actionpin-0.1.0",
+   "ts": "2026-10-22T04:10:49Z",
+   "type": "release",
+   "severity": "low",
+   "scope": "own",
+   "tool": "actionpin",
+   "repo": "CloudCorpRecords/actionpin",
+   "title": "actionpin v0.1.0 shipped",
+   "detail": "First release: GitHub Actions SHA-pinning audit and fix, CLI plus MCP."
   }
  ]
 }

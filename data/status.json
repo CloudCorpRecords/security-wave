@@ -1,5 +1,5 @@
 {
- "generated_at": "2026-10-23T09:26:54Z",
+ "generated_at": "2026-10-23T09:59:57Z",
  "generated_by": "scripts/update-data.mjs, the scheduled pipeline. Every block is derived from its named source; see SELF-UPDATE.md.",
  "tools": {
   "hookcheck": {
@@ -63,18 +63,18 @@
    "blurb": "Observability and root cause: scan history, diffs, blame provenance, watch mode with measured time-to-detect."
   },
   "mcpvet": {
-   "version": "0.1.3",
+   "version": "0.1.4",
    "npm": "https://www.npmjs.com/package/@reneturcios/mcpvet",
    "repo": "https://github.com/CloudCorpRecords/mcpvet",
    "blurb": "MCP server and skill vetting before install: dangerous capability combos, config autostart shapes, typosquat names. The ClawHavoc defense.",
    "tests": {
     "state": "pass",
-    "passed": 44,
+    "passed": 51,
     "failed": 0,
-    "total": 44,
-    "tested_version": "0.1.3",
-    "tested_at": "2026-10-23T09:26:19Z",
-    "duration_s": 2.5
+    "total": 51,
+    "tested_version": "0.1.4",
+    "tested_at": "2026-10-23T09:59:25Z",
+    "duration_s": 3.4
    }
   },
   "depguard": {
@@ -110,27 +110,33 @@
  },
  "ledger": {
   "source": "ledger/problems.md in this repo (the public ledger of record), parsed by scripts/parse-records.mjs on every pipeline run",
-  "as_of": "2026-10-22T11:02:01-07:00",
-  "found": 122,
-  "fixed": 113,
+  "as_of": "2026-10-23T02:58:51-07:00",
+  "found": 149,
+  "fixed": 139,
   "fixed_confirmed": 5,
   "limits": 8,
   "closed_no_repro": 1,
-  "open_total": 0,
+  "open_total": 1,
   "unknown_disposition": 0,
   "open_blocker": 0,
   "open_real": 0,
   "open_real_low": 0,
-  "open_cosmetic": 0,
+  "open_cosmetic": 1,
   "by_severity": {
-   "blocker": 3,
-   "real": 59,
-   "real_low": 36,
-   "cosmetic": 11,
+   "blocker": 4,
+   "real": 77,
+   "real_low": 43,
+   "cosmetic": 12,
    "limit": 8,
    "unranked": 5
   },
-  "open_entries": [],
+  "open_entries": [
+   {
+    "id": "P-188",
+    "severity": "undefined",
+    "title": "One divergent first report after ingest, not reproduced"
+   }
+  ],
   "missing_status": [],
   "rounds": [
    {
@@ -141,7 +147,7 @@
     "rows": 17
    }
   ],
-  "open_detail": "Nothing is open. All 122 ledgered problems are closed: 113 fixed, 8 documented limits, 1 closed as not reproduced. What remains is the round verdict itself: solid requires a validation round with zero BLOCKER and zero unexplained REAL on the final binaries, and the current round state is carried in the program record above.",
+  "open_detail": "Open undefined: P-188 (One divergent first report after ingest, not reproduced).",
   "stale": false
  },
  "corpus": {
@@ -169,7 +175,7 @@
  "watchlist": [
   {
    "repo": "CloudCorpRecords/greenlight",
-   "head": "0a5a26a93312",
+   "head": "e445c89e5b77",
    "actionpin": {
     "verdict": "PINNED",
     "total": 13,
@@ -177,7 +183,7 @@
     "mutable": 0,
     "branch": 0,
     "local": 0,
-    "checked_at": "2026-10-23T09:26:57.852Z"
+    "checked_at": "2026-10-23T09:59:59.432Z"
    },
    "hookcheck": {
     "verdict": "REVIEW",
@@ -185,7 +191,7 @@
     "safe": 5,
     "risky": 1,
     "unknown": 12,
-    "checked_at": "2026-10-23T09:26:57.942Z"
+    "checked_at": "2026-10-23T09:59:59.500Z"
    }
   },
   {
@@ -198,7 +204,7 @@
     "mutable": 0,
     "branch": 0,
     "local": 0,
-    "checked_at": "2026-10-23T09:26:58.472Z"
+    "checked_at": "2026-10-23T10:00:00.144Z"
    },
    "hookcheck": {
     "verdict": "REVIEW",
@@ -206,7 +212,7 @@
     "safe": 4,
     "risky": 1,
     "unknown": 7,
-    "checked_at": "2026-10-23T09:26:58.541Z"
+    "checked_at": "2026-10-23T10:00:00.198Z"
    }
   },
   {
@@ -219,7 +225,7 @@
     "mutable": 0,
     "branch": 0,
     "local": 0,
-    "checked_at": "2026-10-23T09:26:59.026Z"
+    "checked_at": "2026-10-23T10:00:00.682Z"
    },
    "hookcheck": {
     "verdict": "REVIEW",
@@ -227,7 +233,7 @@
     "safe": 4,
     "risky": 1,
     "unknown": 7,
-    "checked_at": "2026-10-23T09:26:59.097Z"
+    "checked_at": "2026-10-23T10:00:00.737Z"
    }
   },
   {
@@ -240,7 +246,7 @@
     "mutable": 0,
     "branch": 0,
     "local": 0,
-    "checked_at": "2026-10-23T09:26:59.581Z"
+    "checked_at": "2026-10-23T10:00:01.237Z"
    },
    "hookcheck": {
     "verdict": "REVIEW",
@@ -248,12 +254,12 @@
     "safe": 4,
     "risky": 1,
     "unknown": 7,
-    "checked_at": "2026-10-23T09:26:59.652Z"
+    "checked_at": "2026-10-23T10:00:01.293Z"
    }
   },
   {
    "repo": "CloudCorpRecords/prwatch",
-   "head": "1f76e692c015",
+   "head": "706cd1cda367",
    "actionpin": {
     "verdict": "PINNED",
     "total": 10,
@@ -261,7 +267,7 @@
     "mutable": 0,
     "branch": 0,
     "local": 0,
-    "checked_at": "2026-10-23T09:27:00.109Z"
+    "checked_at": "2026-10-23T10:00:01.848Z"
    },
    "hookcheck": {
     "verdict": "REVIEW",
@@ -269,7 +275,7 @@
     "safe": 5,
     "risky": 1,
     "unknown": 7,
-    "checked_at": "2026-10-23T09:27:00.180Z"
+    "checked_at": "2026-10-23T10:00:01.903Z"
    }
   },
   {
@@ -282,7 +288,7 @@
     "mutable": 0,
     "branch": 0,
     "local": 0,
-    "checked_at": "2026-10-23T09:27:00.685Z"
+    "checked_at": "2026-10-23T10:00:02.455Z"
    },
    "hookcheck": {
     "verdict": "REVIEW",
@@ -290,12 +296,12 @@
     "safe": 5,
     "risky": 1,
     "unknown": 7,
-    "checked_at": "2026-10-23T09:27:00.757Z"
+    "checked_at": "2026-10-23T10:00:02.510Z"
    }
   },
   {
    "repo": "CloudCorpRecords/gatefile",
-   "head": "4240335b0de6",
+   "head": "4685117f9ab6",
    "actionpin": {
     "verdict": "PINNED",
     "total": 10,
@@ -303,7 +309,7 @@
     "mutable": 0,
     "branch": 0,
     "local": 0,
-    "checked_at": "2026-10-23T09:27:01.225Z"
+    "checked_at": "2026-10-23T10:00:03.015Z"
    },
    "hookcheck": {
     "verdict": "REVIEW",
@@ -311,12 +317,12 @@
     "safe": 7,
     "risky": 1,
     "unknown": 8,
-    "checked_at": "2026-10-23T09:27:01.308Z"
+    "checked_at": "2026-10-23T10:00:03.074Z"
    }
   },
   {
    "repo": "CloudCorpRecords/pkgverdict",
-   "head": "8cfd9044e9b5",
+   "head": "a87641d5d403",
    "actionpin": {
     "verdict": "PINNED",
     "total": 8,
@@ -324,7 +330,7 @@
     "mutable": 0,
     "branch": 0,
     "local": 0,
-    "checked_at": "2026-10-23T09:27:01.828Z"
+    "checked_at": "2026-10-23T10:00:03.629Z"
    },
    "hookcheck": {
     "verdict": "REVIEW",
@@ -332,7 +338,7 @@
     "safe": 2,
     "risky": 1,
     "unknown": 15,
-    "checked_at": "2026-10-23T09:27:01.903Z"
+    "checked_at": "2026-10-23T10:00:03.688Z"
    }
   },
   {
@@ -345,7 +351,7 @@
     "mutable": 0,
     "branch": 0,
     "local": 0,
-    "checked_at": "2026-10-23T09:27:03.942Z"
+    "checked_at": "2026-10-23T10:00:05.382Z"
    },
    "hookcheck": {
     "verdict": "REVIEW",
@@ -353,7 +359,7 @@
     "safe": 0,
     "risky": 11,
     "unknown": 37,
-    "checked_at": "2026-10-23T09:27:04.412Z"
+    "checked_at": "2026-10-23T10:00:05.758Z"
    }
   },
   {
@@ -366,7 +372,7 @@
     "mutable": 0,
     "branch": 0,
     "local": 0,
-    "checked_at": "2026-10-23T09:27:04.961Z"
+    "checked_at": "2026-10-23T10:00:06.390Z"
    },
    "hookcheck": {
     "verdict": "REVIEW",
@@ -374,7 +380,7 @@
     "safe": 4,
     "risky": 1,
     "unknown": 7,
-    "checked_at": "2026-10-23T09:27:05.043Z"
+    "checked_at": "2026-10-23T10:00:06.445Z"
    }
   },
   {
@@ -387,7 +393,7 @@
     "mutable": 0,
     "branch": 0,
     "local": 0,
-    "checked_at": "2026-10-23T09:27:05.549Z"
+    "checked_at": "2026-10-23T10:00:06.978Z"
    },
    "hookcheck": {
     "verdict": "REVIEW",
@@ -395,12 +401,12 @@
     "safe": 4,
     "risky": 1,
     "unknown": 7,
-    "checked_at": "2026-10-23T09:27:05.624Z"
+    "checked_at": "2026-10-23T10:00:07.033Z"
    }
   },
   {
    "repo": "CloudCorpRecords/injectcheck",
-   "head": "f182283f2361",
+   "head": "bd7f31dc5c72",
    "actionpin": {
     "verdict": "PINNED",
     "total": 8,
@@ -408,7 +414,7 @@
     "mutable": 0,
     "branch": 0,
     "local": 0,
-    "checked_at": "2026-10-23T09:27:06.165Z"
+    "checked_at": "2026-10-23T10:00:07.621Z"
    },
    "hookcheck": {
     "verdict": "REVIEW",
@@ -416,7 +422,7 @@
     "safe": 4,
     "risky": 1,
     "unknown": 7,
-    "checked_at": "2026-10-23T09:27:06.235Z"
+    "checked_at": "2026-10-23T10:00:07.674Z"
    }
   },
   {
@@ -429,7 +435,7 @@
     "mutable": 0,
     "branch": 0,
     "local": 0,
-    "checked_at": "2026-10-23T09:27:06.716Z"
+    "checked_at": "2026-10-23T10:00:08.592Z"
    },
    "hookcheck": {
     "verdict": "REVIEW",
@@ -437,7 +443,7 @@
     "safe": 4,
     "risky": 1,
     "unknown": 7,
-    "checked_at": "2026-10-23T09:27:06.785Z"
+    "checked_at": "2026-10-23T10:00:08.646Z"
    }
   },
   {
@@ -449,7 +455,7 @@
     "mutable": 0,
     "branch": 0,
     "local": 0,
-    "checked_at": "2026-10-23T09:27:07.279Z"
+    "checked_at": "2026-10-23T10:00:09.168Z"
    },
    "hookcheck": {
     "verdict": "REVIEW",
@@ -457,9 +463,9 @@
     "safe": 4,
     "risky": 1,
     "unknown": 7,
-    "checked_at": "2026-10-23T09:27:07.363Z"
+    "checked_at": "2026-10-23T10:00:09.233Z"
    },
-   "head": "ef06afc7dc4b"
+   "head": "c1934a65dd30"
   },
   {
    "repo": "CloudCorpRecords/depguard",
@@ -470,7 +476,7 @@
     "mutable": 0,
     "branch": 0,
     "local": 0,
-    "checked_at": "2026-10-23T09:27:07.832Z"
+    "checked_at": "2026-10-23T10:00:09.758Z"
    },
    "hookcheck": {
     "verdict": "REVIEW",
@@ -478,7 +484,7 @@
     "safe": 4,
     "risky": 1,
     "unknown": 7,
-    "checked_at": "2026-10-23T09:27:07.902Z"
+    "checked_at": "2026-10-23T10:00:09.812Z"
    },
    "head": "069a8a404b90"
   },
@@ -491,7 +497,7 @@
     "mutable": 0,
     "branch": 0,
     "local": 0,
-    "checked_at": "2026-10-23T09:27:08.412Z"
+    "checked_at": "2026-10-23T10:00:10.332Z"
    },
    "hookcheck": {
     "verdict": "REVIEW",
@@ -499,13 +505,13 @@
     "safe": 4,
     "risky": 1,
     "unknown": 7,
-    "checked_at": "2026-10-23T09:27:08.487Z"
+    "checked_at": "2026-10-23T10:00:10.389Z"
    },
    "head": "b334bef2d385"
   }
  ],
  "pipeline": {
-  "last_scan_at": "2026-10-23T09:26:54Z",
+  "last_scan_at": "2026-10-23T09:59:57Z",
   "interval_minutes": 15,
   "note": "Scans run every 15 minutes; the stamp moves when a scan changes the data."
  }
